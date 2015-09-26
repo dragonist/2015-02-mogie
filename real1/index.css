@@ -1,3 +1,39 @@
-.movie-box{
+html, body, header, ul, section{
+	margin: 0;
+	padding: 0;
+}
+ul {
+	list-style: none;
+}
+a{
 
+}
+
+header {
+	position: fixed;
+	top:0;
+	width:100%;
+	z-index: 10;
+	/*height: 50px;*/
+	background-color: rgba(0,0,0,0.5);
+}
+section{
+	width: 100%;
+	padding-top: 50px;
+	position: relative;
+	background-color: red;
+}
+section > *{
+	margin: 0 auto;
+	max-width: 300px;
+}
+header .nav > *{
+	display: none;
+}
+header .nav.active-more button:nth-child(1){
+	display: inline;
+}
+
+.movie-box{
+	display: inline-block;
 }
