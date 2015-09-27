@@ -1,4 +1,4 @@
-html, body, header, ul, section{
+html, body, header, ul, h1, section{
 	margin: 0;
 	padding: 0;
 }
@@ -6,7 +6,7 @@ ul {
 	list-style: none;
 }
 a{
-
+	text-decoration: none;
 }
 
 header {
@@ -16,17 +16,48 @@ header {
 	z-index: 10;
 	/*height: 50px;*/
 	background-color: rgba(0,0,0,0.5);
+	overflow: hidden;
+	height: 50px;
 }
-section{
+header h1{
+	position: absolute;
+	left: 20px;
+}
+header div.nav{
+	position: absolute;
+	right: 20px;
+}
+header div#countContainer{
 	width: 100%;
-	padding-top: 50px;
+	position: absolute;
+	text-align: center;
+	bottom:0;
+	background: aqua;
+}
+section#selectWrapper{
 	position: relative;
+	width: 100%;
+	padding-top: 100px;
 	background-color: red;
 }
-section > *{
+section#selectWrapper article{
 	margin: 0 auto;
-	max-width: 300px;
+	background-color: green;
+	max-width: 800px;
+	padding: 3em 1em;
 }
+section#selectWrapper article ul{
+	background-color: orange;
+}
+section#resultWrapper{
+	background-color: purple;
+	position: fixed;
+	margin: 0 auto;
+	right: 0;
+	top: 50px;
+	max-width: 600px;
+}
+
 header .nav > *{
 	display: none;
 }
@@ -34,6 +65,73 @@ header .nav.active-more button:nth-child(1){
 	display: inline;
 }
 
+
+
+
 .movie-box{
+	position: relative;
 	display: inline-block;
+	width: 185px;
+	height: 260px;
+	border-radius: 5px;
+	/*background: red;*/
+	overflow: hidden;
+	margin: 5px;
+}
+.movie-box .box-image img{
+	/*height: 260px;*/
+	max-width: 100%;
+}
+.movie-box .box-contents {
+	position: absolute;
+	width: 185px;
+	height: 260px;
+	background-color: rgba(0,0,0,0.5);
+	top:0;
+	z-index: 5;
+	text-align: center;
+	opacity: 0;
+	transition: all 0.3s;
+	webkit-transition: all 0.3s;
+}
+.movie-box:hover .box-contents{
+	opacity:1;
+}
+.movie-box.select .box-contents{
+	opacity:1;
+}
+
+.movie-box .box-contents .contents{
+	position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    color: #403f4e;
+}
+.movie-box .box-contents .contents .title{
+	height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    border-bottom: 1px solid #F3F3F5;
+    overflow: hidden; 
+}
+.movie-box .box-contents .contents .rating{
+	padding: 12px 0 15px;
+}
+.movie-box .box-contents .contents .rating span{
+	display: inline-block;
+	background:url(image/heart-blank.png) center center no-repeat;
+	width: 30px;
+	height: 28px;
+	transition: all 0.3s;
+	webkit-transition: all 0.3s;
+	cursor: pointer;
+}
+.movie-box .box-contents .contents .rating span:hover{
+	background:url(image/heart-blink.png) center center no-repeat;
+}
+.movie-box .box-contents .contents .rating span.on{
+	background:url(image/heart-blink.png) center center no-repeat;
 }
