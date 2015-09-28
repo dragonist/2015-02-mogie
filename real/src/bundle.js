@@ -44,13 +44,36 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	document.write(__webpack_require__(1));
+	/** @jsx React.DOM */'use strict'
+
+	var React = __webpack_require__(1)
+	var Content = __webpack_require__(2)
+
+	React.render(React.createElement(Content, null), document.getElementById('countContainer'))
 
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
 
-	module.exports = "It works from content.js.";
+	module.exports = React;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM *//** @jsx React.DOM */
+
+	'use strict'
+	var React = __webpack_require__(1)
+
+	module.exports = React.createClass({
+
+	    displayName: 'HelloReact',
+
+	    render: function(){
+	        return React.createElement("div", null, "Hello React")
+	    }
+	})
 
 /***/ }
 /******/ ]);
