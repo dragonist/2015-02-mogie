@@ -9,8 +9,11 @@ ul {
 a{
 	text-decoration: none;
 }
+html{
+	background-color: #e5e5e5;
+}
 
-/* css custom */
+/* css custom header, footer*/
 header {
 	position: fixed;
 	top:0;
@@ -19,34 +22,50 @@ header {
 	overflow: hidden;
 	height: 80px;
 	background-color: #ffffff;
-	border-bottom: 1px solid #c8c8c8;
-	box-shadow: rgba(0,0,0,0.1) 0 1px 2px;
+
 }
 header h1{
 	position: absolute;
 	left: 20px;
 	padding:1%;
+	padding-top: 10px;
 }
 header h1 a{
-	color: #ffffff;
+	color: #48CFAD;
 }
 header div.nav{
 	position: absolute;
+	top: 20px;
 	right: 20px;
+}
+header div.nav a{
+	color: #37BC98;
 }
 header div#countContainer{
 	width: 100%;
 	position: absolute;
 	text-align: center;
 	bottom:0;
-	background: aqua;
+	background: #37BC98;
 }
+footer {
+	padding:10px;
+}
+
+
+
+/* section */
+section{
+	-webkit-transition: -webkit-transform 1.3s;
+	transition: transform 1.3s;
+}
+
+
 section#selectWrapper{
 	background-color: #e5e5e5;
 	position: relative;
 	width: 100%;
-	padding-top: 100px;
-	/*background-color: red;*/
+	padding-top: 56px;
 }
 
 section#selectWrapper ul{
@@ -54,21 +73,45 @@ section#selectWrapper ul{
 	max-width: 1000px;
 	padding: 3em 1em;
 }
+section#selectWrapper #waitContainer{
+	margin: 0 auto;
+	max-width: 600px;
+	padding: 3em 1em;
+	text-align: center;
+}
 section#resultWrapper{
 	background-color: purple;
 	position: fixed;
 	margin: 0 auto;
-	right: 0;
 	top: 50px;
-	max-width: 600px;
+	right: 0px;
+	width: 100%;
+	height: 100%;
 }
 
-header .nav > *{
-	display: none;
+
+body.showSelectWrapper section#selectWrapper{
+	-webkit-transform: translateX(0%);
+	-ms-transform: translateX(0%);
+	transform: translateX(0%);
 }
-header .nav.active-more button:nth-child(2){
-	display: inline;
+body.showResultWrapper section#selectWrapper{
+	-webkit-transform: translateX(-100%);
+	-ms-transform: translateX(-100%);
+	transform: translateX(-100%);
+	/*opacity: 0.1;*/
 }
+body.showSelectWrapper section#resultWrapper {
+	-webkit-transform: translateX(100%);
+	-ms-transform: translateX(100%);
+	transform: translateX(100%);
+}
+body.showResultWrapper section#resultWrapper.on{
+	-webkit-transform: translateX(0%);
+	-ms-transform: translateX(0%);
+	transform: translateX(0%);
+}
+
 
 
 
@@ -177,15 +220,15 @@ header .nav.active-more button:nth-child(2){
 		width: 130px;
 	}
 	.movie-box .box-contents .contents .rating span{
-		width: 20px;
+		width: 23px;
 		background-size: 100%;
 	}
 	.movie-box .box-contents .contents .rating:hover span.on{
-		width: 20px;
+		width: 23px;
 		background-size: 100%;
 	}
 	.movie-box.on .box-contents .contents .rating span.on{
-		width: 20px;
+		width: 23px;
 		background-size: 100%;
 	}
 

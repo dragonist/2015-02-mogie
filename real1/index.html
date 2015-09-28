@@ -6,12 +6,12 @@
 	<title>Mogie</title>
 	<link rel="stylesheet" href="index.css">
 </head>
-<body>
+<body class="showSelectWrapper">
 	<header>
 		<h1><a href="#">Mogie</a></h1>
 		<div class="nav active-more">
-			<button>분석 결과</button>
-			<button>더 평가하기</button>
+			<a href="#result">분석 결과</a>
+			<a href="#">더 평가하기 </a>
 		</div>
 		<div id="countContainer">
 			<span id="count">3</span>
@@ -194,12 +194,15 @@
 				
 			</ul>
 			<div id="waitContainer">
-				잠시만 기다려 주세요
+				끝! 더 이상 영화가 존재하지 않습니다. 
 			</div>
 	</section>
 	<section id="resultWrapper">
+		<div id="moreContinaer">
+			더 체크해 주세요
+		</div>
 		<div id="loadContainer">
-			
+			잠시만 기다려 주세요
 		</div>
 		<ul id="resultContainer">
 			<!-- 앞에 체크한 데이터를 가지고 그래프를 그림 -->
@@ -224,9 +227,10 @@
 		</ul> 
 	</section>
 	<footer>
-		erin@naver.com 
+		erin@naver.com © 2015. All Rights Reserved.
 	</footer>
 	<script src="lib/js/classie.js"></script>
+	<script src="lib/js/AnimOnScroll.js"></script>
 	<script src="index.js"></script>
 </body>
 </html>
