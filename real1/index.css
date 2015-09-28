@@ -1,3 +1,4 @@
+/* css reset */
 html, body, header, ul, h1, section{
 	margin: 0;
 	padding: 0;
@@ -9,6 +10,7 @@ a{
 	text-decoration: none;
 }
 
+/* css custom */
 header {
 	position: fixed;
 	top:0;
@@ -38,15 +40,15 @@ header div#countContainer{
 	background: aqua;
 }
 section#selectWrapper{
+	background-color: #e5e5e5;
 	position: relative;
 	width: 100%;
 	padding-top: 100px;
-	background-color: red;
+	/*background-color: red;*/
 }
 
 section#selectWrapper ul{
 	margin: 0 auto;
-	background-color: green;
 	max-width: 1000px;
 	padding: 3em 1em;
 }
@@ -68,7 +70,7 @@ header .nav.active-more button:nth-child(2){
 
 
 
-
+/* movie-box list responsive design */
 .movie-box{
 	min-width: 162px;
 	position: relative;
@@ -134,10 +136,13 @@ header .nav.active-more button:nth-child(2){
 	webkit-transition: all 0.3s;
 	cursor: pointer;
 }
-.movie-box .box-contents .contents .rating span:hover{
+/*.movie-box .box-contents .contents .rating span:hover{
+	background:url(image/heart-blink.png) center center no-repeat;
+}*/
+.movie-box .box-contents .contents .rating:hover span.on{
 	background:url(image/heart-blink.png) center center no-repeat;
 }
-.movie-box .box-contents .contents .rating span.on{
+.movie-box.on .box-contents .contents .rating span.on{
 	background:url(image/heart-blink.png) center center no-repeat;
 }
 

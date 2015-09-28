@@ -16,10 +16,21 @@ elBoxContainer.addEventListener("click", function(e) {
 
 	var target = e.target;
 	var children = target.parentNode.children;
-	for(var i=0; i<target.dataset.key; i++){
-		classie.addClass(children[i], "on");
+	var ancestor = target.closest(".movie-box");
+
+	if(target.parentNode.dataset.key && target.parentNode.dataset.key === target.dataset.key){
+		for(var i=0; i<target.dataset.key; i++){
+			classie.removeClass(children[i], "on");
+		}
+		target.parentNode.dataset.key = null;
+		classie.removeClass(ancestor,"on");
+	}else{
+		for(var i=0; i<target.dataset.key; i++){
+			classie.addClass(children[i], "on");
+		}
+		target.parentNode.dataset.key = target.dataset.key;
+		classie.addClass(ancestor,"on");
 	}
-	target.parentNode.dataset.key = target.dataset.key;
 });
 
 
