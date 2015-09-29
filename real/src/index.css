@@ -119,10 +119,11 @@ body div.showResultWrapper section#resultWrapper.on{
 	transform: translateX(0px);
 }
 
-body div.showSelectWrapper header div.nav a:nth-child(1){
+body div.showResultWrapper header div.nav a:nth-child(1){
 	display: inline;
 }
-body div.showResultWrapper header div.nav a:nth-child(2){
+
+body div.showSelectWrapper header div.nav a:nth-child(2){
 	display: inline;
 }
 

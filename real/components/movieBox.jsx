@@ -1,5 +1,3 @@
-
-
 module.exports = React.createClass({
   getInitialState: function() {
     return {"id":"77959","title":"빌리 엘리어트 뮤지컬 라이브","src":"img/img77959.jpg"};
@@ -7,20 +5,22 @@ module.exports = React.createClass({
   onClick:function (e) {
     var target = e.target;
     var children = target.parentNode.children;
-    var ancestor = target.closest(".movie-box");
-    var method = (this.props.movie.rate && this.props.movie.rate === target.dataset.key)? "remove":"add";
-   	
-   	for(var i=0; i<5; i++){
-   		if(i<target.dataset.key){
-   	  		classie[method+"Class"](children[i], "on");
-   		}else{
-   			classie["removeClass"](children[i], "on");
-   		}
-   	}
+    // var ancestor = target.closest(".movie-box"); //for ei 8
+    var ancestor = target.parentElement.parentElement.parentElement.parentElement
+    var rate = (this.props.movie.rate && this.props.movie.rate === target.dataset.key)? null: target.dataset.key;
+    
+    var method = (rate)? "add":"remove";
+    for(var i=0; i<5; i++){
+      if(i<target.dataset.key){
+          classie[method+"Class"](children[i], "on");
+      }else{
+        classie["removeClass"](children[i], "on");
+      }
+    }
+    classie[method+"Class"](ancestor,"on");
 
-   	classie[method+"Class"](ancestor,"on");
-   	this.props[method+"Rating"](target.dataset.key);
-
+    this.props.movie.rate = rate;
+   	this.props[method+"Rating"](this.props.movie);
   },
   render: function() {
     return (

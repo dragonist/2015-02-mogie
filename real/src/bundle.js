@@ -44,71 +44,22 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/** @jsx React.DOM */var data = __webpack_require__(1);
+	/** @jsx React.DOM */var app= {};
+	app.SelectWrapper = "showSelectWrapper";
+	app.ResultWrapper = "showResultWrapper";
+	app.Movies = __webpack_require__(1);
+	app.DownLoads = [];
 
-	var MovieBox = __webpack_require__(2);
+	var BoxContainer = __webpack_require__(5);
+	var Header = __webpack_require__(4);
 
-
-	var BoxContainer = React.createClass({displayName: "BoxContainer",
-	  onPut: function (movie, i, rating) {
-	    movie.rate = rating;
-	    this.props.addMovie(movie);
-	  },
-	  onPop: function (movie, i, rating) {
-	    movie.rate = null;
-	    this.props.removeMovie(movie);
-	  },
-	  render: function() {
-	    var boxList = this.props.data.map(function (movie, i) {
-	      var onPut = this.onPut.bind(this, movie, i);
-	      var onPop = this.onPop.bind(this, movie, i);
-	      return (
-	        React.createElement(MovieBox, {
-	          key: i, 
-	          movie: movie, 
-	          addRating: onPut, 
-	          removeRating: onPop}
-	        )
-	      );
-	    }, this);
-	    return (
-	      React.createElement("ul", {id: "boxContainer"}, 
-	        boxList
-	      )
-	    );
-	  }
-	});
-
-	// React.render(
-	//   <CommentBox url="./../mockData/movie1.json" />,
-	//   document.getElementById('Container')
-	// );
-
-	var Header = React.createClass({displayName: "Header",
-	  render:function () {
-	    return (
-	      React.createElement("header", null, 
-	        React.createElement("h1", null, React.createElement("a", {href: "#/"}, "Mogie")), 
-	        React.createElement("div", {className: "nav activemore"}, 
-	          React.createElement("a", {href: "#/result"}, "분석 결과"), 
-	          React.createElement("a", {href: "#/"}, "더 평가하기 ")
-	        ), 
-	        React.createElement("div", {id: "countContainer"}, 
-	          React.createElement("span", {id: "count"}, this.props.count), 
-	          React.createElement("span", null, "/ ", this.props.totalCount), 
-	          React.createElement("span", null)
-	        )
-	      )
-	    )
-	  }
-	})
 
 	var SelectWrapper = React.createClass({displayName: "SelectWrapper",
 	  render:function () {
 	    return (
 	      React.createElement("section", {id: "selectWrapper"}, 
 	          React.createElement(BoxContainer, {
-	            data: data, 
+	            data: this.props.movies, 
 	            addMovie: this.props.onPut, 
 	            removeMovie: this.props.onPop}), 
 	          React.createElement("div", {id: "waitContainer"}, 
@@ -118,13 +69,23 @@
 	    )
 	  }
 	})
-	var ResultWrapper = React.createClass({displayName: "ResultWrapper",
 
+	var ResultWrapper = React.createClass({displayName: "ResultWrapper",
 	  render:function () {
 	    var count = this.props.count
 	    var totalCount = this.props.totalCount
 	    var moreCount = totalCount-count;
 	    var container;
+	    
+	    var boxList = this.props.activeMovie.map(function (movieId, i) {
+	      return (
+	          React.createElement("li", {key: i}, 
+	            React.createElement("p", null, 
+	              movieId
+	            )
+	          )
+	      );
+	    }, this);
 
 	    if(count<totalCount){
 	      container = React.createElement("div", {id: "moreContinaer"}, 
@@ -134,8 +95,10 @@
 	    }else{
 	      container = React.createElement("ul", {id: "resultContainer"}, 
 	          React.createElement("li", null, 
-	            React.createElement("div", null, 
-	              "그래프"
+	            React.createElement("div", {id: "activeMovie"}, 
+	              React.createElement("ul", null, 
+	                boxList
+	              )
 	            ), 
 	            React.createElement("div", null, 
 	              "뭔가 데스크탑에서만 보일 화면"
@@ -160,24 +123,36 @@
 	    )
 	  }
 	})
-	var app= {};
-	app.SelectWrapper ="showSelectWrapper";
-	app.ResultWrapper ="showResultWrapper";
+
+
 
 	var Body = React.createClass({displayName: "Body",
-	  onPut: function (movie) {
-	    console.log("onPut +++ ")
-	    console.log(movie);
-	  },
-	  onPop: function (movie) {
-	    console.log("onPop --- ")
-	    console.log(movie);
-	  },
 	  getInitialState: function () {
 	    return {
+	      selectCount: 0,
+	      totalCount: 10,
+	      activeMovie: [],
 	      nowShowing: app.SelectWrapper,
-	      showResult: true
+	      showResult: true,
+	      downloadMovie:[]
 	    };
+	  },
+	  moreShow: function (e) {
+	    console.log(e);
+	    console.log("show More");
+	    this.state.downloadMovie.push({"id":"77959","title":"빌리 엘리어트 뮤지컬 라이브","src":"img/img77959.jpg"});
+	    this.setState({downloadMovie: this.state.downloadMovie})
+	  },
+	  onPut: function (movie) {
+	    this.state.activeMovie.push(movie.id);
+	    var count = this.state.selectCount+1;
+	    this.setState({selectCount: count});
+	  },
+
+	  onPop: function (movie) {
+	    this.state.activeMovie.pop(movie.id);
+	    var count = this.state.selectCount-1;
+	    this.setState({selectCount: count})
 	  },
 	  componentDidMount: function () {
 	    var setState = this.setState;
@@ -188,25 +163,25 @@
 	    router.init('/');
 	  },
 	  render: function() {
-	    var selectCount = 2;
-	    var totalCount = 10;
 	    var header, selectWrapper, resultWrapper;
-
 	    header =
 	      React.createElement(Header, {
-	        count: selectCount, 
-	        totalCount: totalCount, 
-	        nowShowing: this.state.nowShowing});
+	        count: this.state.selectCount, 
+	        totalCount: this.state.totalCount, 
+	        nowShowing: this.state.nowShowing, 
+	        moreShow: this.moreShow});
 
 	    selectWrapper = 
 	      React.createElement(SelectWrapper, {
 	        onPop: this.onPop, 
-	        onPut: this.onPut})
+	        onPut: this.onPut, 
+	        movies: this.state.downloadMovie})
 	    
 	    resultWrapper = 
 	      React.createElement(ResultWrapper, {
-	        count: selectCount, 
-	        totalCount: totalCount})
+	        count: this.state.selectCount, 
+	        totalCount: this.state.totalCount, 
+	        activeMovie: this.state.activeMovie})
 	    
 	    return (
 	      React.createElement("div", {className: this.state.nowShowing}, 
@@ -323,29 +298,29 @@
 /* 2 */
 /***/ function(module, exports) {
 
-	/** @jsx React.DOM */
-
-	module.exports = React.createClass({displayName: "module.exports",
+	/** @jsx React.DOM */module.exports = React.createClass({displayName: "module.exports",
 	  getInitialState: function() {
 	    return {"id":"77959","title":"빌리 엘리어트 뮤지컬 라이브","src":"img/img77959.jpg"};
 	  },
 	  onClick:function (e) {
 	    var target = e.target;
 	    var children = target.parentNode.children;
-	    var ancestor = target.closest(".movie-box");
-	    var method = (this.props.movie.rate && this.props.movie.rate === target.dataset.key)? "remove":"add";
-	   	
-	   	for(var i=0; i<5; i++){
-	   		if(i<target.dataset.key){
-	   	  		classie[method+"Class"](children[i], "on");
-	   		}else{
-	   			classie["removeClass"](children[i], "on");
-	   		}
-	   	}
+	    // var ancestor = target.closest(".movie-box"); //for ei 8
+	    var ancestor = target.parentElement.parentElement.parentElement.parentElement
+	    var rate = (this.props.movie.rate && this.props.movie.rate === target.dataset.key)? null: target.dataset.key;
+	    
+	    var method = (rate)? "add":"remove";
+	    for(var i=0; i<5; i++){
+	      if(i<target.dataset.key){
+	          classie[method+"Class"](children[i], "on");
+	      }else{
+	        classie["removeClass"](children[i], "on");
+	      }
+	    }
+	    classie[method+"Class"](ancestor,"on");
 
-	   	classie[method+"Class"](ancestor,"on");
-	   	this.props[method+"Rating"](target.dataset.key);
-
+	    this.props.movie.rate = rate;
+	   	this.props[method+"Rating"](this.props.movie);
 	  },
 	  render: function() {
 	    return (
@@ -366,6 +341,61 @@
 	      			)
 	      		)
 	      	)
+	    );
+	  }
+	});
+
+/***/ },
+/* 3 */,
+/* 4 */
+/***/ function(module, exports) {
+
+	/** @jsx React.DOM */module.exports = React.createClass({displayName: "module.exports",
+	  render:function () {
+	    var nav;
+	    if(this.props.count<this.props.totalCount){
+	      nav = React.createElement("a", {href: "#/", onClick: this.props.moreShow}, "더 보기")
+	    }else{
+	      nav = React.createElement("a", {href: "#/result"}, "분석 결과")
+	    }
+	    return (
+	      React.createElement("header", null, 
+	        React.createElement("h1", null, React.createElement("a", {href: "#/"}, "Mogie")), 
+	        React.createElement("div", {className: "nav"}, 
+	          React.createElement("a", {href: "#/"}, "더 평가하기"), 
+	          nav
+	        ), 
+	        React.createElement("div", {id: "countContainer"}, 
+	          React.createElement("span", {id: "count"}, this.props.count), 
+	          React.createElement("span", null, "/ ", this.props.totalCount), 
+	          React.createElement("span", null)
+	        )
+	      )
+	    )
+	  }
+	});
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */var MovieBox = __webpack_require__(2);
+	module.exports  = React.createClass({displayName: "module.exports",
+	  render: function() {
+	    var boxList = this.props.data.map(function (movie, i) {
+	      return (
+	          React.createElement(MovieBox, {
+	            key: i, 
+	            movie: movie, 
+	            addRating: this.props.addMovie, 
+	            removeRating: this.props.removeMovie}
+	          )
+	      );
+	    }, this);
+	    return (
+	      React.createElement("ul", {id: "boxContainer"}, 
+	        boxList
+	      )
 	    );
 	  }
 	});

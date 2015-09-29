@@ -1,68 +1,19 @@
-var data = require('./movie3.js');
+var app= {};
+app.SelectWrapper = "showSelectWrapper";
+app.ResultWrapper = "showResultWrapper";
+app.Movies = require('./../mockData/movie3.js');
+app.DownLoads = [];
 
-var MovieBox = require('./movieBox.jsx');
+var BoxContainer = require('./boxContainer.jsx');
+var Header = require('./header.jsx');
 
-
-var BoxContainer = React.createClass({
-  onPut: function (movie, i, rating) {
-    movie.rate = rating;
-    this.props.addMovie(movie);
-  },
-  onPop: function (movie, i, rating) {
-    movie.rate = null;
-    this.props.removeMovie(movie);
-  },
-  render: function() {
-    var boxList = this.props.data.map(function (movie, i) {
-      var onPut = this.onPut.bind(this, movie, i);
-      var onPop = this.onPop.bind(this, movie, i);
-      return (
-        <MovieBox 
-          key={i} 
-          movie={movie} 
-          addRating={onPut} 
-          removeRating={onPop}>
-        </MovieBox>
-      );
-    }, this);
-    return (
-      <ul id="boxContainer">
-        {boxList}
-      </ul>
-    );
-  }
-});
-
-// React.render(
-//   <CommentBox url="./../mockData/movie1.json" />,
-//   document.getElementById('Container')
-// );
-
-var Header = React.createClass({
-  render:function () {
-    return (
-      <header>
-        <h1><a href="#/">Mogie</a></h1>
-        <div className="nav activemore">
-          <a href="#/result">분석 결과</a>
-          <a href="#/">더 평가하기 </a>
-        </div>
-        <div id="countContainer">
-          <span id="count">{this.props.count}</span>
-          <span>/ {this.props.totalCount}</span>
-          <span></span>
-        </div>
-      </header>
-    )
-  }
-})
 
 var SelectWrapper = React.createClass({
   render:function () {
     return (
       <section id="selectWrapper">
-          <BoxContainer 
-            data={data} 
+          <BoxContainer
+            data={this.props.movies}
             addMovie={this.props.onPut} 
             removeMovie={this.props.onPop} />
           <div id="waitContainer">
@@ -72,13 +23,23 @@ var SelectWrapper = React.createClass({
     )
   }
 })
-var ResultWrapper = React.createClass({
 
+var ResultWrapper = React.createClass({
   render:function () {
     var count = this.props.count
     var totalCount = this.props.totalCount
     var moreCount = totalCount-count;
     var container;
+    
+    var boxList = this.props.activeMovie.map(function (movieId, i) {
+      return (
+          <li key={i}>
+            <p>
+              {movieId}
+            </p>
+          </li>
+      );
+    }, this);
 
     if(count<totalCount){
       container = <div id="moreContinaer">
@@ -88,8 +49,10 @@ var ResultWrapper = React.createClass({
     }else{
       container = <ul id="resultContainer">
           <li>
-            <div>
-              그래프
+            <div id="activeMovie">
+              <ul>
+                {boxList}
+              </ul>
             </div>
             <div>
               뭔가 데스크탑에서만 보일 화면
@@ -114,24 +77,36 @@ var ResultWrapper = React.createClass({
     )
   }
 })
-var app= {};
-app.SelectWrapper ="showSelectWrapper";
-app.ResultWrapper ="showResultWrapper";
+
+
 
 var Body = React.createClass({
-  onPut: function (movie) {
-    console.log("onPut +++ ")
-    console.log(movie);
-  },
-  onPop: function (movie) {
-    console.log("onPop --- ")
-    console.log(movie);
-  },
   getInitialState: function () {
     return {
+      selectCount: 0,
+      totalCount: 10,
+      activeMovie: [],
       nowShowing: app.SelectWrapper,
-      showResult: true
+      showResult: true,
+      downloadMovie:[]
     };
+  },
+  moreShow: function (e) {
+    console.log(e);
+    console.log("show More");
+    this.state.downloadMovie.push({"id":"77959","title":"빌리 엘리어트 뮤지컬 라이브","src":"img/img77959.jpg"});
+    this.setState({downloadMovie: this.state.downloadMovie})
+  },
+  onPut: function (movie) {
+    this.state.activeMovie.push(movie.id);
+    var count = this.state.selectCount+1;
+    this.setState({selectCount: count});
+  },
+
+  onPop: function (movie) {
+    this.state.activeMovie.pop(movie.id);
+    var count = this.state.selectCount-1;
+    this.setState({selectCount: count})
   },
   componentDidMount: function () {
     var setState = this.setState;
@@ -142,25 +117,25 @@ var Body = React.createClass({
     router.init('/');
   },
   render: function() {
-    var selectCount = 2;
-    var totalCount = 10;
     var header, selectWrapper, resultWrapper;
-
     header =
       <Header
-        count={selectCount}
-        totalCount={totalCount}
-        nowShowing={this.state.nowShowing} />;
+        count={this.state.selectCount}
+        totalCount={this.state.totalCount}
+        nowShowing={this.state.nowShowing} 
+        moreShow={this.moreShow}/>;
 
     selectWrapper = 
       <SelectWrapper 
         onPop={this.onPop}
-        onPut={this.onPut}/>
+        onPut={this.onPut}
+        movies={this.state.downloadMovie}/>
     
     resultWrapper = 
       <ResultWrapper 
-        count={selectCount}
-        totalCount = {totalCount}/>
+        count={this.state.selectCount}
+        totalCount = {this.state.totalCount}
+        activeMovie={this.state.activeMovie}/>
     
     return (
       <div className={this.state.nowShowing}>

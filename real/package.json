@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run serve | npm run dev",
-    "serve": "cd src && ./../node_modules/.bin/http-server -p 3000",
+    "serve": "cd src && ./../node_modules/.bin/http-server -p 3060",
     "dev": "./node_modules/.bin/webpack --progress --colors --watch"
   },
   "author": "",
