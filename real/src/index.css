@@ -33,12 +33,13 @@ header h1{
 header h1 a{
 	color: #48CFAD;
 }
-header div.nav{
+header div.nav a{
 	position: absolute;
 	top: 20px;
 	right: 20px;
 }
 header div.nav a{
+	display: none;
 	color: #37BC98;
 }
 header div#countContainer{
@@ -90,30 +91,34 @@ section#resultWrapper{
 }
 
 
-body.showSelectWrapper section#selectWrapper{
+body div.showSelectWrapper section#selectWrapper{
 	-webkit-transform: translateX(0%);
 	-ms-transform: translateX(0%);
 	transform: translateX(0%);
 }
-body.showResultWrapper section#selectWrapper{
+body div.showResultWrapper section#selectWrapper{
 	-webkit-transform: translateX(-100%);
 	-ms-transform: translateX(-100%);
 	transform: translateX(-100%);
 	/*opacity: 0.1;*/
 }
-body.showSelectWrapper section#resultWrapper {
+body div.showSelectWrapper section#resultWrapper {
 	-webkit-transform: translateX(100%);
 	-ms-transform: translateX(100%);
 	transform: translateX(100%);
 }
-body.showResultWrapper section#resultWrapper.on{
+body div.showResultWrapper section#resultWrapper.on{
 	-webkit-transform: translateX(0%);
 	-ms-transform: translateX(0%);
 	transform: translateX(0%);
 }
 
-
-
+body div.showSelectWrapper header div.nav a:nth-child(1){
+	display: inline;
+}
+body div.showResultWrapper header div.nav a:nth-child(2){
+	display: inline;
+}
 
 /* movie-box list responsive design */
 .movie-box{

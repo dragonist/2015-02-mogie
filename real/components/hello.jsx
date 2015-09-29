@@ -1,28 +1,5 @@
 var data = require('./movie3.js');
-
-var MovieBox = React.createClass({
-  render: function() {
-    return (
-      	<li key={this.props.id} className="movie-box" data-key={this.props.id}>
-      		<div className="box-image">
-      			<img src={this.props.src} alt={this.props.title} width="185px"/>
-      		</div>
-      		<div className="box-contents">
-      			<div className="contents">
-      				<div className="title">{this.props.title}</div>
-      				<div className="rating">
-      					<span data-key="1"></span>
-      					<span data-key="2"></span>
-      					<span data-key="3"></span>
-      					<span data-key="4"></span>
-      					<span data-key="5"></span>
-      				</div>
-      			</div>
-      		</div>
-      	</li>
-    );
-  }
-});
+var MovieBox = require('./movieBox.jsx');
 
 var BoxContainer = React.createClass({
   render: function() {
@@ -50,10 +27,10 @@ var Header = React.createClass({
   render:function () {
     return (
       <header>
-        <h1><a href="#/">Mogie</a></h1>
+        <h1><a href="#">Mogie</a></h1>
         <div className="nav activemore">
-          <a href="#/result">분석 결과</a>
-          <a href="#/">더 평가하기 </a>
+          <a href="#result">분석 결과</a>
+          <a href="#">더 평가하기 </a>
         </div>
         <div id="countContainer">
           <span id="count">3</span>
@@ -110,39 +87,13 @@ var ResultWrapper = React.createClass({
     )
   }
 })
-var app= {};
-app.SelectWrapper ="showSelectWrapper";
-app.ResultWrapper ="showResultWrapper";
 
 
 var Body = React.createClass({
-  getInitialState: function () {
-    return {
-      nowShowing: app.SelectWrapper
-    };
-  },
-  componentDidMount: function () {
-    var setState = this.setState;
-    var router = Router({
-      '/': setState.bind(this, {nowShowing: app.SelectWrapper}),
-      '/result': setState.bind(this, {nowShowing: app.ResultWrapper}),
-    });
-    router.init('/');
-  },
   render: function() {
-    var selectCount = 3;
-    var totalCount = 10;
-    var header;
-
-    header =
-      <Header
-        count={selectCount}
-        completedCount={totalCount}
-        nowShowing={this.state.nowShowing} />;
-
     return (
-      <div className={this.state.nowShowing}>
-        {header}
+      <div>
+        <Header/>
         <SelectWrapper/>
         <ResultWrapper/>
         <footer>

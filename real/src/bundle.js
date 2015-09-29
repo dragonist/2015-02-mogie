@@ -96,10 +96,10 @@
 	  render:function () {
 	    return (
 	      React.createElement("header", null, 
-	        React.createElement("h1", null, React.createElement("a", {href: "#"}, "Mogie")), 
+	        React.createElement("h1", null, React.createElement("a", {href: "#/"}, "Mogie")), 
 	        React.createElement("div", {className: "nav activemore"}, 
-	          React.createElement("a", {href: "#result"}, "분석 결과"), 
-	          React.createElement("a", {href: "#"}, "더 평가하기 ")
+	          React.createElement("a", {href: "#/result"}, "분석 결과"), 
+	          React.createElement("a", {href: "#/"}, "더 평가하기 ")
 	        ), 
 	        React.createElement("div", {id: "countContainer"}, 
 	          React.createElement("span", {id: "count"}, "3"), 
@@ -156,13 +156,39 @@
 	    )
 	  }
 	})
+	var app= {};
+	app.SelectWrapper ="showSelectWrapper";
+	app.ResultWrapper ="showResultWrapper";
 
 
 	var Body = React.createClass({displayName: "Body",
+	  getInitialState: function () {
+	    return {
+	      nowShowing: app.SelectWrapper
+	    };
+	  },
+	  componentDidMount: function () {
+	    var setState = this.setState;
+	    var router = Router({
+	      '/': setState.bind(this, {nowShowing: app.SelectWrapper}),
+	      '/result': setState.bind(this, {nowShowing: app.ResultWrapper}),
+	    });
+	    router.init('/');
+	  },
 	  render: function() {
+	    var selectCount = 3;
+	    var totalCount = 10;
+	    var header;
+
+	    header =
+	      React.createElement(Header, {
+	        count: selectCount, 
+	        completedCount: totalCount, 
+	        nowShowing: this.state.nowShowing});
+
 	    return (
-	      React.createElement("div", null, 
-	        React.createElement(Header, null), 
+	      React.createElement("div", {className: this.state.nowShowing}, 
+	        header, 
 	        React.createElement(SelectWrapper, null), 
 	        React.createElement(ResultWrapper, null), 
 	        React.createElement("footer", null, 
