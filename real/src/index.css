@@ -81,36 +81,42 @@ section#selectWrapper #waitContainer{
 	text-align: center;
 }
 section#resultWrapper{
-	background-color: purple;
+	background-color: #ffffff;
 	position: fixed;
 	margin: 0 auto;
-	top: 50px;
+	top: 0px;
 	right: 0px;
 	width: 100%;
+	max-width: 600px;
 	height: 100%;
+	overflow: hidden;
+	padding-top: 80px;
+}
+section#resultWrapper div{
+	margin: 20px;
 }
 
 
 body div.showSelectWrapper section#selectWrapper{
-	-webkit-transform: translateX(0%);
-	-ms-transform: translateX(0%);
-	transform: translateX(0%);
+	-webkit-transform: translateX(0px);
+	-ms-transform: translateX(0px);
+	transform: translateX(0px);
 }
 body div.showResultWrapper section#selectWrapper{
-	-webkit-transform: translateX(-100%);
-	-ms-transform: translateX(-100%);
-	transform: translateX(-100%);
+	-webkit-transform: translateX(-600px);
+	-ms-transform: translateX(-600px);
+	transform: translateX(-600px);
 	/*opacity: 0.1;*/
 }
 body div.showSelectWrapper section#resultWrapper {
-	-webkit-transform: translateX(100%);
-	-ms-transform: translateX(100%);
-	transform: translateX(100%);
+	-webkit-transform: translateX(600px);
+	-ms-transform: translateX(600px);
+	transform: translateX(600px);
 }
 body div.showResultWrapper section#resultWrapper.on{
-	-webkit-transform: translateX(0%);
-	-ms-transform: translateX(0%);
-	transform: translateX(0%);
+	-webkit-transform: translateX(0px);
+	-ms-transform: translateX(0px);
+	transform: translateX(0px);
 }
 
 body div.showSelectWrapper header div.nav a:nth-child(1){
@@ -190,11 +196,36 @@ body div.showResultWrapper header div.nav a:nth-child(2){
 /*.movie-box .box-contents .contents .rating span:hover{
 	background:url(image/heart-blink.png) center center no-repeat;
 }*/
-.movie-box .box-contents .contents .rating:hover span.on{
-	background:url(image/heart-blink.png) center center no-repeat;
+.movie-box .box-contents .contents .rating:hover span.hoverOn{
+	background:url(image/heart-hover.png) center center no-repeat;
 }
 .movie-box.on .box-contents .contents .rating span.on{
 	background:url(image/heart-blink.png) center center no-repeat;
+}
+
+
+@media screen and (max-width: 600px){
+	body div.showSelectWrapper section#selectWrapper{
+		-webkit-transform: translateX(0%);
+		-ms-transform: translateX(0%);
+		transform: translateX(0%);
+	}
+	body div.showResultWrapper section#selectWrapper{
+		-webkit-transform: translateX(-100%);
+		-ms-transform: translateX(-100%);
+		transform: translateX(-100%);
+		/*opacity: 0.1;*/
+	}
+	body div.showSelectWrapper section#resultWrapper {
+		-webkit-transform: translateX(100%);
+		-ms-transform: translateX(100%);
+		transform: translateX(100%);
+	}
+	body div.showResultWrapper section#resultWrapper.on{
+		-webkit-transform: translateX(0%);
+		-ms-transform: translateX(0%);
+		transform: translateX(0%);
+	}
 }
 
 @media screen and (max-width: 965px) {
@@ -210,10 +241,6 @@ body div.showResultWrapper header div.nav a:nth-child(2){
 	}
 }
 @media screen and (max-width: 586px) {
-	/*.movie-box{
-		width: 45%;
-		font-size: 10px;
-	}*/
 	.movie-box{
 		/*width:200px;*/
 		width: 45%;
@@ -228,7 +255,7 @@ body div.showResultWrapper header div.nav a:nth-child(2){
 		width: 23px;
 		background-size: 100%;
 	}
-	.movie-box .box-contents .contents .rating:hover span.on{
+	.movie-box .box-contents .contents .rating:hover span.hoverOn{
 		width: 23px;
 		background-size: 100%;
 	}

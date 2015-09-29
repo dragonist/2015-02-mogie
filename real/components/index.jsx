@@ -1,38 +1,30 @@
 var data = require('./movie3.js');
 
-var MovieBox = React.createClass({
-  render: function() {
-    return (
-      	<li key={this.props.id} className="movie-box" data-key={this.props.id}>
-      		<div className="box-image">
-      			<img src={this.props.src} alt={this.props.title} width="185px"/>
-      		</div>
-      		<div className="box-contents">
-      			<div className="contents">
-      				<div className="title">{this.props.title}</div>
-      				<div className="rating">
-      					<span data-key="1"></span>
-      					<span data-key="2"></span>
-      					<span data-key="3"></span>
-      					<span data-key="4"></span>
-      					<span data-key="5"></span>
-      				</div>
-      			</div>
-      		</div>
-      	</li>
-    );
-  }
-});
+var MovieBox = require('./movieBox.jsx');
+
 
 var BoxContainer = React.createClass({
+  onPut: function (movie, i, rating) {
+    movie.rate = rating;
+    this.props.addMovie(movie);
+  },
+  onPop: function (movie, i, rating) {
+    movie.rate = null;
+    this.props.removeMovie(movie);
+  },
   render: function() {
-    var boxList = this.props.data.map(function (movie) {
+    var boxList = this.props.data.map(function (movie, i) {
+      var onPut = this.onPut.bind(this, movie, i);
+      var onPop = this.onPop.bind(this, movie, i);
       return (
-        <MovieBox author={movie.id} title={movie.title} src={movie.src}>
-          {movie.title}
+        <MovieBox 
+          key={i} 
+          movie={movie} 
+          addRating={onPut} 
+          removeRating={onPop}>
         </MovieBox>
       );
-    });
+    }, this);
     return (
       <ul id="boxContainer">
         {boxList}
@@ -56,8 +48,8 @@ var Header = React.createClass({
           <a href="#/">더 평가하기 </a>
         </div>
         <div id="countContainer">
-          <span id="count">3</span>
-          <span>/ 10</span>
+          <span id="count">{this.props.count}</span>
+          <span>/ {this.props.totalCount}</span>
           <span></span>
         </div>
       </header>
@@ -69,7 +61,10 @@ var SelectWrapper = React.createClass({
   render:function () {
     return (
       <section id="selectWrapper">
-          <BoxContainer data={data}/>
+          <BoxContainer 
+            data={data} 
+            addMovie={this.props.onPut} 
+            removeMovie={this.props.onPop} />
           <div id="waitContainer">
             끝! 더 이상 영화가 존재하지 않습니다. 
           </div>
@@ -78,16 +73,20 @@ var SelectWrapper = React.createClass({
   }
 })
 var ResultWrapper = React.createClass({
+
   render:function () {
-    return (
-      <section id="resultWrapper">
-        <div id="moreContinaer">
-          더 체크해 주세요
+    var count = this.props.count
+    var totalCount = this.props.totalCount
+    var moreCount = totalCount-count;
+    var container;
+
+    if(count<totalCount){
+      container = <div id="moreContinaer">
+          {count} 개 체크 하셨습니다. <br/>
+          {moreCount} 더 체크해 주세요
         </div>
-        <div id="loadContainer">
-          잠시만 기다려 주세요
-        </div>
-        <ul id="resultContainer">
+    }else{
+      container = <ul id="resultContainer">
           <li>
             <div>
               그래프
@@ -106,6 +105,11 @@ var ResultWrapper = React.createClass({
             </div>
           </li>
         </ul> 
+    }
+
+    return (
+      <section id="resultWrapper">
+        {container}
       </section>
     )
   }
@@ -114,11 +118,19 @@ var app= {};
 app.SelectWrapper ="showSelectWrapper";
 app.ResultWrapper ="showResultWrapper";
 
-
 var Body = React.createClass({
+  onPut: function (movie) {
+    console.log("onPut +++ ")
+    console.log(movie);
+  },
+  onPop: function (movie) {
+    console.log("onPop --- ")
+    console.log(movie);
+  },
   getInitialState: function () {
     return {
-      nowShowing: app.SelectWrapper
+      nowShowing: app.SelectWrapper,
+      showResult: true
     };
   },
   componentDidMount: function () {
@@ -130,21 +142,31 @@ var Body = React.createClass({
     router.init('/');
   },
   render: function() {
-    var selectCount = 3;
+    var selectCount = 2;
     var totalCount = 10;
-    var header;
+    var header, selectWrapper, resultWrapper;
 
     header =
       <Header
         count={selectCount}
-        completedCount={totalCount}
+        totalCount={totalCount}
         nowShowing={this.state.nowShowing} />;
 
+    selectWrapper = 
+      <SelectWrapper 
+        onPop={this.onPop}
+        onPut={this.onPut}/>
+    
+    resultWrapper = 
+      <ResultWrapper 
+        count={selectCount}
+        totalCount = {totalCount}/>
+    
     return (
       <div className={this.state.nowShowing}>
         {header}
-        <SelectWrapper/>
-        <ResultWrapper/>
+        {selectWrapper}
+        {resultWrapper}
         <footer>
           erin@naver.com © 2015. All Rights Reserved.
         </footer>
@@ -154,6 +176,6 @@ var Body = React.createClass({
 });
 
 React.render(
-  <Body data={data}/>,
+  <Body />,
   document.getElementById('Container')
 );

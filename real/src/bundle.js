@@ -46,39 +46,31 @@
 
 	/** @jsx React.DOM */var data = __webpack_require__(1);
 
-	var MovieBox = React.createClass({displayName: "MovieBox",
-	  render: function() {
-	    return (
-	      	React.createElement("li", {key: this.props.id, className: "movie-box", "data-key": this.props.id}, 
-	      		React.createElement("div", {className: "box-image"}, 
-	      			React.createElement("img", {src: this.props.src, alt: this.props.title, width: "185px"})
-	      		), 
-	      		React.createElement("div", {className: "box-contents"}, 
-	      			React.createElement("div", {className: "contents"}, 
-	      				React.createElement("div", {className: "title"}, this.props.title), 
-	      				React.createElement("div", {className: "rating"}, 
-	      					React.createElement("span", {"data-key": "1"}), 
-	      					React.createElement("span", {"data-key": "2"}), 
-	      					React.createElement("span", {"data-key": "3"}), 
-	      					React.createElement("span", {"data-key": "4"}), 
-	      					React.createElement("span", {"data-key": "5"})
-	      				)
-	      			)
-	      		)
-	      	)
-	    );
-	  }
-	});
+	var MovieBox = __webpack_require__(2);
+
 
 	var BoxContainer = React.createClass({displayName: "BoxContainer",
+	  onPut: function (movie, i, rating) {
+	    movie.rate = rating;
+	    this.props.addMovie(movie);
+	  },
+	  onPop: function (movie, i, rating) {
+	    movie.rate = null;
+	    this.props.removeMovie(movie);
+	  },
 	  render: function() {
-	    var boxList = this.props.data.map(function (movie) {
+	    var boxList = this.props.data.map(function (movie, i) {
+	      var onPut = this.onPut.bind(this, movie, i);
+	      var onPop = this.onPop.bind(this, movie, i);
 	      return (
-	        React.createElement(MovieBox, {author: movie.id, title: movie.title, src: movie.src}, 
-	          movie.title
+	        React.createElement(MovieBox, {
+	          key: i, 
+	          movie: movie, 
+	          addRating: onPut, 
+	          removeRating: onPop}
 	        )
 	      );
-	    });
+	    }, this);
 	    return (
 	      React.createElement("ul", {id: "boxContainer"}, 
 	        boxList
@@ -102,8 +94,8 @@
 	          React.createElement("a", {href: "#/"}, "더 평가하기 ")
 	        ), 
 	        React.createElement("div", {id: "countContainer"}, 
-	          React.createElement("span", {id: "count"}, "3"), 
-	          React.createElement("span", null, "/ 10"), 
+	          React.createElement("span", {id: "count"}, this.props.count), 
+	          React.createElement("span", null, "/ ", this.props.totalCount), 
 	          React.createElement("span", null)
 	        )
 	      )
@@ -115,7 +107,10 @@
 	  render:function () {
 	    return (
 	      React.createElement("section", {id: "selectWrapper"}, 
-	          React.createElement(BoxContainer, {data: data}), 
+	          React.createElement(BoxContainer, {
+	            data: data, 
+	            addMovie: this.props.onPut, 
+	            removeMovie: this.props.onPop}), 
 	          React.createElement("div", {id: "waitContainer"}, 
 	            "끝! 더 이상 영화가 존재하지 않습니다." 
 	          )
@@ -124,16 +119,20 @@
 	  }
 	})
 	var ResultWrapper = React.createClass({displayName: "ResultWrapper",
+
 	  render:function () {
-	    return (
-	      React.createElement("section", {id: "resultWrapper"}, 
-	        React.createElement("div", {id: "moreContinaer"}, 
-	          "더 체크해 주세요"
-	        ), 
-	        React.createElement("div", {id: "loadContainer"}, 
-	          "잠시만 기다려 주세요"
-	        ), 
-	        React.createElement("ul", {id: "resultContainer"}, 
+	    var count = this.props.count
+	    var totalCount = this.props.totalCount
+	    var moreCount = totalCount-count;
+	    var container;
+
+	    if(count<totalCount){
+	      container = React.createElement("div", {id: "moreContinaer"}, 
+	          count, " 개 체크 하셨습니다. ", React.createElement("br", null), 
+	          moreCount, " 더 체크해 주세요"
+	        )
+	    }else{
+	      container = React.createElement("ul", {id: "resultContainer"}, 
 	          React.createElement("li", null, 
 	            React.createElement("div", null, 
 	              "그래프"
@@ -151,7 +150,12 @@
 	              "뭔가 데스크탑에서만 보일 화면"
 	            )
 	          )
-	        )
+	        ) 
+	    }
+
+	    return (
+	      React.createElement("section", {id: "resultWrapper"}, 
+	        container
 	      )
 	    )
 	  }
@@ -160,11 +164,19 @@
 	app.SelectWrapper ="showSelectWrapper";
 	app.ResultWrapper ="showResultWrapper";
 
-
 	var Body = React.createClass({displayName: "Body",
+	  onPut: function (movie) {
+	    console.log("onPut +++ ")
+	    console.log(movie);
+	  },
+	  onPop: function (movie) {
+	    console.log("onPop --- ")
+	    console.log(movie);
+	  },
 	  getInitialState: function () {
 	    return {
-	      nowShowing: app.SelectWrapper
+	      nowShowing: app.SelectWrapper,
+	      showResult: true
 	    };
 	  },
 	  componentDidMount: function () {
@@ -176,21 +188,31 @@
 	    router.init('/');
 	  },
 	  render: function() {
-	    var selectCount = 3;
+	    var selectCount = 2;
 	    var totalCount = 10;
-	    var header;
+	    var header, selectWrapper, resultWrapper;
 
 	    header =
 	      React.createElement(Header, {
 	        count: selectCount, 
-	        completedCount: totalCount, 
+	        totalCount: totalCount, 
 	        nowShowing: this.state.nowShowing});
 
+	    selectWrapper = 
+	      React.createElement(SelectWrapper, {
+	        onPop: this.onPop, 
+	        onPut: this.onPut})
+	    
+	    resultWrapper = 
+	      React.createElement(ResultWrapper, {
+	        count: selectCount, 
+	        totalCount: totalCount})
+	    
 	    return (
 	      React.createElement("div", {className: this.state.nowShowing}, 
 	        header, 
-	        React.createElement(SelectWrapper, null), 
-	        React.createElement(ResultWrapper, null), 
+	        selectWrapper, 
+	        resultWrapper, 
 	        React.createElement("footer", null, 
 	          "erin@naver.com © 2015. All Rights Reserved."
 	        )
@@ -200,7 +222,7 @@
 	});
 
 	React.render(
-	  React.createElement(Body, {data: data}),
+	  React.createElement(Body, null),
 	  document.getElementById('Container')
 	);
 
@@ -296,6 +318,57 @@
 
 	module.exports = data;
 
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	/** @jsx React.DOM */
+
+	module.exports = React.createClass({displayName: "module.exports",
+	  getInitialState: function() {
+	    return {"id":"77959","title":"빌리 엘리어트 뮤지컬 라이브","src":"img/img77959.jpg"};
+	  },
+	  onClick:function (e) {
+	    var target = e.target;
+	    var children = target.parentNode.children;
+	    var ancestor = target.closest(".movie-box");
+	    var method = (this.props.movie.rate && this.props.movie.rate === target.dataset.key)? "remove":"add";
+	   	
+	   	for(var i=0; i<5; i++){
+	   		if(i<target.dataset.key){
+	   	  		classie[method+"Class"](children[i], "on");
+	   		}else{
+	   			classie["removeClass"](children[i], "on");
+	   		}
+	   	}
+
+	   	classie[method+"Class"](ancestor,"on");
+	   	this.props[method+"Rating"](target.dataset.key);
+
+	  },
+	  render: function() {
+	    return (
+	      	React.createElement("li", {key: this.props.movie.id, className: "movie-box", "data-key": this.props.movie.id}, 
+	      		React.createElement("div", {className: "box-image"}, 
+	      			React.createElement("img", {src: this.props.movie.src, alt: this.props.movie.title, width: "185px"})
+	      		), 
+	      		React.createElement("div", {className: "box-contents"}, 
+	      			React.createElement("div", {className: "contents"}, 
+	      				React.createElement("div", {className: "title"}, this.props.movie.title), 
+	      				React.createElement("div", {className: "rating"}, 
+	      					React.createElement("span", {"data-key": "1", onClick: this.onClick}), 
+	      					React.createElement("span", {"data-key": "2", onClick: this.onClick}), 
+	      					React.createElement("span", {"data-key": "3", onClick: this.onClick}), 
+	      					React.createElement("span", {"data-key": "4", onClick: this.onClick}), 
+	      					React.createElement("span", {"data-key": "5", onClick: this.onClick})
+	      				)
+	      			)
+	      		)
+	      	)
+	    );
+	  }
+	});
 
 /***/ }
 /******/ ]);
