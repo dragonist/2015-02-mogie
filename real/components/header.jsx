@@ -2,7 +2,7 @@ module.exports = React.createClass({
   render:function () {
     var nav;
     if(this.props.count<this.props.totalCount){
-      nav = <a href="#/" onClick={this.props.moreShow}>더 보기</a>
+      nav = <a href="#/" onClick={this.props.downScroll}>더 보기</a>
     }else{
       nav = <a href="#/result">분석 결과</a>
     }

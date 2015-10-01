@@ -17,7 +17,7 @@ var SelectWrapper = React.createClass({
             data={this.props.movies}
             addMovie={this.props.onPut} 
             removeMovie={this.props.onPop} />
-          <div id="waitContainer">
+          <div id="waitContainer" className={this.props.waitPageForLoad}>
             끝! 더 이상 영화가 존재하지 않습니다. 
           </div>
       </section>
@@ -90,8 +90,16 @@ var Body = React.createClass({
       activeMovie: [],
       nowShowing: app.SelectWrapper,
       showResult: true,
-      downloadMovie:app.DownLoads
+      downloadMovie:app.DownLoads,
+      waitPageForLoad: "",
+      loadItem: 0,
+      loadEach: 4,
+      loadMovie: []
     };
+  },
+  downScroll: function(e) {
+    // window.scrollTo(0,screen.height);
+    window.scrollTo(0, window.scrollY+screen.height-80);
   },
   moreShow: function (e) {
     console.log(e);
@@ -99,12 +107,17 @@ var Body = React.createClass({
     this.state.downloadMovie.push({"id":"77959","title":"빌리 엘리어트 뮤지컬 라이브","src":"img/img77959.jpg"});
     this.setState({downloadMovie: this.state.downloadMovie})
   },
+  handleScroll: function (e) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+           this.setState({waitPageForLoad:"on"});
+           this.moreShow(e);
+    }
+  },
   onPut: function (movie) {
     var count = this.state.selectCount+1;
     this.state.activeMovie.push(movie.id);
     this.setState({selectCount: count});
   },
-
   onPop: function (movie) {
     var count = this.state.selectCount-1;
     this.state.activeMovie["key"+movie.id] = null;
@@ -117,6 +130,16 @@ var Body = React.createClass({
       '/result': setState.bind(this, {nowShowing: app.ResultWrapper}),
     });
     router.init('/');
+    
+    window.addEventListener('scroll', this.handleScroll);
+    
+    if(document.body.offsetWidth>965){
+      setState({loadEach:10})
+    }else if(document.body.offsetWidth>768){
+      setState({loadEach:8})
+    }else if(document.body.offsetWidth>586){
+      setState({loadEach:6})
+    }
   },
   render: function() {
     var header, selectWrapper, resultWrapper;
@@ -125,13 +148,14 @@ var Body = React.createClass({
         count={this.state.selectCount}
         totalCount={this.state.totalCount}
         nowShowing={this.state.nowShowing} 
-        moreShow={this.moreShow}/>;
+        downScroll={this.downScroll}/>;
 
     selectWrapper = 
       <SelectWrapper 
         onPop={this.onPop}
         onPut={this.onPut}
-        movies={this.state.downloadMovie}/>
+        movies={this.state.downloadMovie}
+        waitPageForLoad={this.state.waitPageForLoad}/>
     
     resultWrapper = 
       <ResultWrapper 
@@ -153,6 +177,7 @@ var Body = React.createClass({
 });
 
 React.render(
-  <Body />,
+
+  <Body/>,
   document.getElementById('Container')
 );

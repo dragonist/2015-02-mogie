@@ -21,3 +21,6 @@ https://github.com/seatgeek/react-infinite
 
 react TODO example
 https://github.com/tastejs/todomvc
+
+cross browsing
+https://gist.github.com/eduardocereto/955642

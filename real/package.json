@@ -14,7 +14,8 @@
   "dependencies": {
     "director": "^1.2.8",
     "jsx-loader": "^0.13.2",
-    "react": "^0.13.3"
+    "react": "^0.13.3",
+    "react-infinite-scroll": "^0.1.5"
   },
   "devDependencies": {
     "http-server": "^0.8.5",
