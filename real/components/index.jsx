@@ -3,6 +3,7 @@ app.SelectWrapper = "showSelectWrapper";
 app.ResultWrapper = "showResultWrapper";
 app.Movies = require('./../mockData/movie3.js');
 app.DownLoads = [];
+app.DownLoads = app.Movies;
 
 var BoxContainer = require('./boxContainer.jsx');
 var Header = require('./header.jsx');
@@ -40,6 +41,7 @@ var ResultWrapper = React.createClass({
           </li>
       );
     }, this);
+    
 
     if(count<totalCount){
       container = <div id="moreContinaer">
@@ -88,7 +90,7 @@ var Body = React.createClass({
       activeMovie: [],
       nowShowing: app.SelectWrapper,
       showResult: true,
-      downloadMovie:[]
+      downloadMovie:app.DownLoads
     };
   },
   moreShow: function (e) {
@@ -98,14 +100,14 @@ var Body = React.createClass({
     this.setState({downloadMovie: this.state.downloadMovie})
   },
   onPut: function (movie) {
-    this.state.activeMovie.push(movie.id);
     var count = this.state.selectCount+1;
+    this.state.activeMovie.push(movie.id);
     this.setState({selectCount: count});
   },
 
   onPop: function (movie) {
-    this.state.activeMovie.pop(movie.id);
     var count = this.state.selectCount-1;
+    this.state.activeMovie["key"+movie.id] = null;
     this.setState({selectCount: count})
   },
   componentDidMount: function () {

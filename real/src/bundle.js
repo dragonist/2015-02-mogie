@@ -49,8 +49,9 @@
 	app.ResultWrapper = "showResultWrapper";
 	app.Movies = __webpack_require__(1);
 	app.DownLoads = [];
+	app.DownLoads = app.Movies;
 
-	var BoxContainer = __webpack_require__(5);
+	var BoxContainer = __webpack_require__(2);
 	var Header = __webpack_require__(4);
 
 
@@ -86,6 +87,7 @@
 	          )
 	      );
 	    }, this);
+	    
 
 	    if(count<totalCount){
 	      container = React.createElement("div", {id: "moreContinaer"}, 
@@ -134,7 +136,7 @@
 	      activeMovie: [],
 	      nowShowing: app.SelectWrapper,
 	      showResult: true,
-	      downloadMovie:[]
+	      downloadMovie:app.DownLoads
 	    };
 	  },
 	  moreShow: function (e) {
@@ -144,14 +146,14 @@
 	    this.setState({downloadMovie: this.state.downloadMovie})
 	  },
 	  onPut: function (movie) {
-	    this.state.activeMovie.push(movie.id);
 	    var count = this.state.selectCount+1;
+	    this.state.activeMovie.push(movie.id);
 	    this.setState({selectCount: count});
 	  },
 
 	  onPop: function (movie) {
-	    this.state.activeMovie.pop(movie.id);
 	    var count = this.state.selectCount-1;
+	    this.state.activeMovie["key"+movie.id] = null;
 	    this.setState({selectCount: count})
 	  },
 	  componentDidMount: function () {
@@ -296,6 +298,31 @@
 
 /***/ },
 /* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */var MovieBox = __webpack_require__(3);
+	module.exports  = React.createClass({displayName: "module.exports",
+	  render: function() {
+	    var boxList = this.props.data.map(function (movie, i) {
+	      return (
+	          React.createElement(MovieBox, {
+	            key: i, 
+	            movie: movie, 
+	            addRating: this.props.addMovie, 
+	            removeRating: this.props.removeMovie}
+	          )
+	      );
+	    }, this);
+	    return (
+	      React.createElement("ul", {id: "boxContainer"}, 
+	        boxList
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 3 */
 /***/ function(module, exports) {
 
 	/** @jsx React.DOM */module.exports = React.createClass({displayName: "module.exports",
@@ -346,7 +373,6 @@
 	});
 
 /***/ },
-/* 3 */,
 /* 4 */
 /***/ function(module, exports) {
 
@@ -372,31 +398,6 @@
 	        )
 	      )
 	    )
-	  }
-	});
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */var MovieBox = __webpack_require__(2);
-	module.exports  = React.createClass({displayName: "module.exports",
-	  render: function() {
-	    var boxList = this.props.data.map(function (movie, i) {
-	      return (
-	          React.createElement(MovieBox, {
-	            key: i, 
-	            movie: movie, 
-	            addRating: this.props.addMovie, 
-	            removeRating: this.props.removeMovie}
-	          )
-	      );
-	    }, this);
-	    return (
-	      React.createElement("ul", {id: "boxContainer"}, 
-	        boxList
-	      )
-	    );
 	  }
 	});
 

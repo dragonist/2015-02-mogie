@@ -81,7 +81,7 @@ section#selectWrapper #waitContainer{
 	text-align: center;
 }
 section#resultWrapper{
-	background-color: #ffffff;
+	background-color: #f2f2f2;
 	position: fixed;
 	margin: 0 auto;
 	top: 0px;
