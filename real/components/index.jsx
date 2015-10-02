@@ -2,8 +2,6 @@ var app= {};
 app.SelectWrapper = "showSelectWrapper";
 app.ResultWrapper = "showResultWrapper";
 app.Movies = require('./../mockData/movie3.js');
-app.DownLoads = [];
-app.DownLoads = app.Movies;
 
 var BoxContainer = require('./boxContainer.jsx');
 var Header = require('./header.jsx');
@@ -18,6 +16,9 @@ var SelectWrapper = React.createClass({
             addMovie={this.props.onPut} 
             removeMovie={this.props.onPop} />
           <div id="waitContainer" className={this.props.waitPageForLoad}>
+            로딩중 입니다. 
+          </div>
+          <div id="endContainer" className={this.props.endPageForLoad}>
             끝! 더 이상 영화가 존재하지 않습니다. 
           </div>
       </section>
@@ -80,8 +81,6 @@ var ResultWrapper = React.createClass({
   }
 })
 
-
-
 var Body = React.createClass({
   getInitialState: function () {
     return {
@@ -90,10 +89,11 @@ var Body = React.createClass({
       activeMovie: [],
       nowShowing: app.SelectWrapper,
       showResult: true,
-      downloadMovie:app.DownLoads,
+      // loadMovie:app.DownLoads,
       waitPageForLoad: "",
-      loadItem: 0,
+      endPageForLoad: "",
       loadEach: 4,
+      hasMore:true,
       loadMovie: []
     };
   },
@@ -101,17 +101,28 @@ var Body = React.createClass({
     // window.scrollTo(0,screen.height);
     window.scrollTo(0, window.scrollY+screen.height-80);
   },
-  moreShow: function (e) {
-    console.log(e);
-    console.log("show More");
-    this.state.downloadMovie.push({"id":"77959","title":"빌리 엘리어트 뮤지컬 라이브","src":"img/img77959.jpg"});
-    this.setState({downloadMovie: this.state.downloadMovie})
-  },
-  handleScroll: function (e) {
+  handleScroll: function () {
+    console.log("handleScroll");
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-           this.setState({waitPageForLoad:"on"});
-           this.moreShow(e);
+      this.setState({waitPageForLoad:"on"});
+      var req = {loadItem:this.state.loadMovie.length, loadEach:this.state.loadEach}
+
+      this.moreShow(req, function (res) {
+        if(res && res.status){
+          this.setState({ loadMovie: this.state.loadMovie.concat(res.movies), waitPageForLoad: "" });
+        }else{
+          debugger;
+          this.setState({ endPageForLoad: "on" , waitPageForLoad: "" });
+        }
+      }.bind(this));
     }
+  },
+  moreShow : function (req, callback) {
+    var res = { movies: [], status: false };
+
+    res.movies = app.Movies.slice(req.loadItem, req.loadItem+req.loadEach);
+    if(res.movies.length === req.loadEach){ res.status=true; } 
+    callback(res);
   },
   onPut: function (movie) {
     var count = this.state.selectCount+1;
@@ -131,7 +142,14 @@ var Body = React.createClass({
     });
     router.init('/');
     
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('scroll', function (e) {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        this.handleScroll();
+      }
+    }.bind(this));
+    this.moreShow({loadItem:this.state.loadMovie.length, loadEach:this.state.loadEach}, function (res) {
+      this.setState({ loadMovie: this.state.loadMovie.concat(res.movies) });
+    }.bind(this));
     
     if(document.body.offsetWidth>965){
       setState({loadEach:10})
@@ -154,8 +172,9 @@ var Body = React.createClass({
       <SelectWrapper 
         onPop={this.onPop}
         onPut={this.onPut}
-        movies={this.state.downloadMovie}
-        waitPageForLoad={this.state.waitPageForLoad}/>
+        movies={this.state.loadMovie}
+        waitPageForLoad={this.state.waitPageForLoad}
+        endPageForLoad={this.state.endPageForLoad}/>
     
     resultWrapper = 
       <ResultWrapper 
@@ -177,7 +196,6 @@ var Body = React.createClass({
 });
 
 React.render(
-
   <Body/>,
   document.getElementById('Container')
 );

@@ -24,3 +24,6 @@ https://github.com/tastejs/todomvc
 
 cross browsing
 https://gist.github.com/eduardocereto/955642
+
+rating react
+https://github.com/ikr/react-star-rating-input
