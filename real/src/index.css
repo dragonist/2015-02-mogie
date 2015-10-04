@@ -80,6 +80,12 @@ section#selectWrapper #waitContainer{
 	padding: 3em 1em;
 	text-align: center;
 }
+section#selectWrapper #endContainer{
+	margin: 0 auto;
+	max-width: 600px;
+	padding: 3em 1em;
+	text-align: center;
+}
 section#resultWrapper{
 	background-color: #f2f2f2;
 	position: fixed;
@@ -175,6 +181,7 @@ body div.showSelectWrapper header div.nav a:nth-child(2){
     text-align: center;
     color: #403f4e;
 }
+
 .movie-box .box-contents .contents .title{
 	height: 40px;
     line-height: 40px;

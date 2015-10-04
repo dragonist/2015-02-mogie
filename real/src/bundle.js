@@ -62,7 +62,7 @@
 	            addMovie: this.props.onPut, 
 	            removeMovie: this.props.onPop}), 
 	          React.createElement("div", {id: "waitContainer", className: this.props.waitPageForLoad}, 
-	            "로딩중 입니다." 
+	            "로딩중 입니다."
 	          ), 
 	          React.createElement("div", {id: "endContainer", className: this.props.endPageForLoad}, 
 	            "끝! 더 이상 영화가 존재하지 않습니다." 
@@ -135,7 +135,6 @@
 	      activeMovie: [],
 	      nowShowing: app.SelectWrapper,
 	      showResult: true,
-	      // loadMovie:app.DownLoads,
 	      waitPageForLoad: "",
 	      endPageForLoad: "",
 	      loadEach: 4,
@@ -148,27 +147,28 @@
 	    window.scrollTo(0, window.scrollY+screen.height-80);
 	  },
 	  handleScroll: function () {
-	    console.log("handleScroll");
+	    if ( this.state.endPageForLoad === "on" || this.state.waitPageForLoad === "on" ) { return; }
 	    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 	      this.setState({waitPageForLoad:"on"});
 	      var req = {loadItem:this.state.loadMovie.length, loadEach:this.state.loadEach}
 
 	      this.moreShow(req, function (res) {
 	        if(res && res.status){
-	          this.setState({ loadMovie: this.state.loadMovie.concat(res.movies), waitPageForLoad: "" });
+	          this.setState({ loadMovie: this.state.loadMovie.concat(res.movies)}, this.setState({waitPageForLoad: ""}) );
 	        }else{
-	          debugger;
 	          this.setState({ endPageForLoad: "on" , waitPageForLoad: "" });
 	        }
 	      }.bind(this));
 	    }
 	  },
 	  moreShow : function (req, callback) {
-	    var res = { movies: [], status: false };
-
-	    res.movies = app.Movies.slice(req.loadItem, req.loadItem+req.loadEach);
-	    if(res.movies.length === req.loadEach){ res.status=true; } 
-	    callback(res);
+	    setTimeout(function () {
+	      var res = { movies: [], status: false };
+	      res.movies = app.Movies.slice(req.loadItem, req.loadItem+req.loadEach);
+	      if(res.movies.length === req.loadEach){ res.status=true; } 
+	      callback(res);
+	    }, 500);    
+	    
 	  },
 	  onPut: function (movie) {
 	    var count = this.state.selectCount+1;
