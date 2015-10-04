@@ -15,11 +15,13 @@ var SelectWrapper = React.createClass({
             data={this.props.movies}
             addMovie={this.props.onPut} 
             removeMovie={this.props.onPop} />
-          <div id="waitContainer" className={this.props.waitPageForLoad}>
-            로딩중 입니다.
-          </div>
-          <div id="endContainer" className={this.props.endPageForLoad}>
-            끝! 더 이상 영화가 존재하지 않습니다. 
+          <div id="bottomContainer">
+            <div id="waitContainer" className={this.props.waitPageForLoad}>
+              로딩중 입니다.
+            </div>
+            <div id="endContainer" className={this.props.endPageForLoad}>
+              끝! 더 이상 영화가 존재하지 않습니다. 
+            </div>
           </div>
       </section>
     )
@@ -110,7 +112,7 @@ var Body = React.createClass({
         if(res && res.status){
           this.setState({ loadMovie: this.state.loadMovie.concat(res.movies)}, this.setState({waitPageForLoad: ""}) );
         }else{
-          this.setState({ endPageForLoad: "on" , waitPageForLoad: "" });
+          this.setState({ endPageForLoad: "on" , waitPageForLoad: "close" });
         }
       }.bind(this));
     }
@@ -134,6 +136,17 @@ var Body = React.createClass({
     this.state.activeMovie["key"+movie.id] = null;
     this.setState({selectCount: count})
   },
+  onScroll:function() {
+    window.addEventListener('scroll', function (e) {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        this.handleScroll();
+      }
+    }.bind(this));
+
+    this.moreShow({loadItem:this.state.loadMovie.length, loadEach:this.state.loadEach}, function (res) {
+      this.setState({ loadMovie: this.state.loadMovie.concat(res.movies) });
+    }.bind(this));
+  },
   componentDidMount: function () {
     var setState = this.setState;
     var router = Router({
@@ -141,22 +154,15 @@ var Body = React.createClass({
       '/result': setState.bind(this, {nowShowing: app.ResultWrapper}),
     });
     router.init('/');
-    
-    window.addEventListener('scroll', function (e) {
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        this.handleScroll();
-      }
-    }.bind(this));
-    this.moreShow({loadItem:this.state.loadMovie.length, loadEach:this.state.loadEach}, function (res) {
-      this.setState({ loadMovie: this.state.loadMovie.concat(res.movies) });
-    }.bind(this));
-    
+
     if(document.body.offsetWidth>965){
-      setState({loadEach:10})
+      this.setState({loadEach:10}, this.onScroll)
     }else if(document.body.offsetWidth>768){
-      setState({loadEach:8})
+      this.setState({loadEach:8}, this.onScroll)
     }else if(document.body.offsetWidth>586){
-      setState({loadEach:6})
+      this.setState({loadEach:6}, this.onScroll)
+    }else{
+      this.onScroll();
     }
   },
   render: function() {

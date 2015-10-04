@@ -74,17 +74,23 @@ section#selectWrapper ul{
 	max-width: 1000px;
 	padding: 3em 1em;
 }
-section#selectWrapper #waitContainer{
+section#selectWrapper #bottomContainer{
+	position: relative;
+	background-color: yellow;
 	margin: 0 auto;
 	max-width: 600px;
 	padding: 3em 1em;
 	text-align: center;
 }
-section#selectWrapper #endContainer{
-	margin: 0 auto;
-	max-width: 600px;
-	padding: 3em 1em;
-	text-align: center;
+section#selectWrapper #bottomContainer div{
+	display: block;
+	opacity: 0;
+}
+section#selectWrapper #bottomContainer div.on{
+	opacity: 1;
+}
+section#selectWrapper #bottomContainer div.close{
+	display: none;
 }
 section#resultWrapper{
 	background-color: #f2f2f2;
