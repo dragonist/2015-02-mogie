@@ -89,92 +89,45 @@
 	})
 
 	var ResultWrapper = React.createClass({displayName: "ResultWrapper",
+	  drawChart: function (ratingData) {
+	    console.log(ratingData);
+	  },
 	  render:function () {
 	    var count = this.props.count
 	    var totalCount = this.props.totalCount
 	    var moreCount = totalCount-count;
 	    var container;
-	    
-	    var boxList = React.createElement("li", null, "aa")
-	    // var boxList = this.props.activeMovie.map(function (movieId, i) {
-	    //   return (
-	    //       <li key={i}>
-	    //         <p>
-	    //           {movieId}
-	    //         </p>
-	    //       </li>
-	    //   );
-	    // }, this);
-	    
+	    var ratingData = [0,0,0,0,0,0];
+	    var boxList = [];
+	    for(var i = 0; i< sessionStorage.length; i++){
+	      var movie = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
+	      ratingData[movie.rating]++;
+	      var result = (React.createElement("li", {key: movie.id}, 
+	        React.createElement("span", {className: "title"}, 
+	          movie.title
+	        ), 
+	        React.createElement("span", {className: "rate"}, 
+	          movie.rating
+	        )
+	      ))
+	      boxList.push(result);
+	    }
+	    this.drawChart(ratingData);
 
 	    if(count<totalCount){
 	      container = React.createElement("div", {id: "moreContinaer"}, 
 	          React.createElement("p", null, 
-	            totalCount-count, " 더 체크해 주세요" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa"
-	          ), 
-	          React.createElement("p", null, 
-	            totalCount-count, " 더 체크해 주세요" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa"
-	          ), 
-	          React.createElement("p", null, 
-	            totalCount-count, " 더 체크해 주세요" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa"
-	          ), 
-	          React.createElement("p", null, 
-	            totalCount-count, " 더 체크해 주세요" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " +
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa" + " " + 
-	            "aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa"
+	            totalCount-count, "개 더 체크해 주세요"
 	          )
 	        )
 	    }else{
-	      container = React.createElement("ul", {id: "resultContainer"}, 
-	          React.createElement("li", null, 
-	            React.createElement("div", {id: "activeMovie"}, 
-	              React.createElement("ul", null, 
-	                boxList
-	              )
+	      container = React.createElement("div", {id: "resultContainer"}, 
+	            React.createElement("ul", {id: "movieList"}, 
+	              boxList
 	            ), 
-	            React.createElement("div", null, 
+	            React.createElement("div", {id: "movieChart"}, 
 	              "뭔가 데스크탑에서만 보일 화면"
 	            )
-	          ), 
-	          
-	          React.createElement("li", null, 
-	            React.createElement("div", null, 
-	              "그래프"
-	            ), 
-	            React.createElement("div", null, 
-	              "뭔가 데스크탑에서만 보일 화면"
-	            )
-	          )
 	        ) 
 	    }
 
@@ -226,8 +179,7 @@
 	      res.movies = app.Movies.slice(req.loadItem, req.loadItem+req.loadEach);
 	      if(res.movies.length === req.loadEach){ res.status=true; } 
 	      callback(res);
-	    }, 500);    
-	    
+	    }, 500);
 	  },
 	  addMovie: function (movie) {
 	    sessionStorage.setItem(movie.id, JSON.stringify(movie));
@@ -266,7 +218,7 @@
 	    var router = Router({
 	      '/'      : setState.bind(this, {nowShowing: app.SelectWrapper}),
 	      '/result': setState.bind(this, {nowShowing: app.ResultWrapper}),
-	      '/mock'  : setMock.bind(this, {nowShowing: app.ResultWrapper, selectCount:4})
+	      '/mock'  : setMock.bind(this, {nowShowing: app.ResultWrapper, selectCount:11})
 	    });
 
 	    var width = document.body.offsetWidth;
@@ -291,7 +243,8 @@
 	        removeMovie: this.removeMovie, 
 	        movies: this.state.loadMovie, 
 	        waitPageForLoad: this.state.waitPageForLoad, 
-	        endPageForLoad: this.state.endPageForLoad})
+	        endPageForLoad: this.state.endPageForLoad, 
+	        activeMovie: this.state.movies})
 	    
 	    resultWrapper = 
 	      React.createElement(ResultWrapper, {

@@ -43,93 +43,46 @@ var SelectWrapper = React.createClass({
 })
 
 var ResultWrapper = React.createClass({
+  drawChart: function (ratingData) {
+    console.log(ratingData);
+  },
   render:function () {
     var count = this.props.count
     var totalCount = this.props.totalCount
     var moreCount = totalCount-count;
     var container;
-    
-    var boxList = <li>aa</li>
-    // var boxList = this.props.activeMovie.map(function (movieId, i) {
-    //   return (
-    //       <li key={i}>
-    //         <p>
-    //           {movieId}
-    //         </p>
-    //       </li>
-    //   );
-    // }, this);
-    
+    var ratingData = [0,0,0,0,0,0];
+    var boxList = [];
+    for(var i = 0; i< sessionStorage.length; i++){
+      var movie = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
+      ratingData[movie.rating]++;
+      var result = (<li key={movie.id}>
+        <span className="title">
+          {movie.title}
+        </span>
+        <span className="rate">
+          {movie.rating}
+        </span>
+      </li>)
+      boxList.push(result);
+    }
+    this.drawChart(ratingData);
 
     if(count<totalCount){
       container = <div id="moreContinaer">
           <p>
-            {totalCount-count} 더 체크해 주세요
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-          </p>
-          <p>
-            {totalCount-count} 더 체크해 주세요
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-          </p>
-          <p>
-            {totalCount-count} 더 체크해 주세요
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-          </p>
-          <p>
-            {totalCount-count} 더 체크해 주세요
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa 
-            aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa aaaa
+            {totalCount-count}개 더 체크해 주세요
           </p>
         </div>
     }else{
-      container = <ul id="resultContainer">
-          <li>
-            <div id="activeMovie">
-              <ul>
-                {boxList}
-              </ul>
-            </div>
-            <div>
+      container = <div id="resultContainer">
+            <ul id="movieList">
+              {boxList}
+            </ul>
+            <div id="movieChart">
               뭔가 데스크탑에서만 보일 화면
             </div>
-          </li>
-          
-          <li>
-            <div>
-              그래프
-            </div>
-            <div>
-              뭔가 데스크탑에서만 보일 화면
-            </div>
-          </li>
-        </ul> 
+        </div> 
     }
 
     return (
@@ -180,8 +133,7 @@ var Body = React.createClass({
       res.movies = app.Movies.slice(req.loadItem, req.loadItem+req.loadEach);
       if(res.movies.length === req.loadEach){ res.status=true; } 
       callback(res);
-    }, 500);    
-    
+    }, 500);
   },
   addMovie: function (movie) {
     sessionStorage.setItem(movie.id, JSON.stringify(movie));
@@ -220,7 +172,7 @@ var Body = React.createClass({
     var router = Router({
       '/'      : setState.bind(this, {nowShowing: app.SelectWrapper}),
       '/result': setState.bind(this, {nowShowing: app.ResultWrapper}),
-      '/mock'  : setMock.bind(this, {nowShowing: app.ResultWrapper, selectCount:4})
+      '/mock'  : setMock.bind(this, {nowShowing: app.ResultWrapper, selectCount:11})
     });
 
     var width = document.body.offsetWidth;
@@ -245,7 +197,8 @@ var Body = React.createClass({
         removeMovie={this.removeMovie}
         movies={this.state.loadMovie}
         waitPageForLoad={this.state.waitPageForLoad}
-        endPageForLoad={this.state.endPageForLoad}/>
+        endPageForLoad={this.state.endPageForLoad}
+        activeMovie={this.state.movies}/>
     
     resultWrapper = 
       <ResultWrapper 
