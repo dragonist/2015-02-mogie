@@ -229,10 +229,9 @@
 	    }, 500);    
 	    
 	  },
-	  onPut: function (movie) {
-	    var count = this.state.selectCount+1;
-	    this.state.activeMovie.push(movie.id);
-	    this.setState({selectCount: count});
+	  addMovie: function (movie) {
+	    sessionStorage.setItem(movie.id, JSON.stringify(movie));
+	    this.setState({selectCount: this.state.selectCount+1})
 	  },
 	  removeMovie: function (movie) {
 	    sessionStorage.removeItem(movie.id);
