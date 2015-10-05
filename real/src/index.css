@@ -53,12 +53,18 @@ footer {
 	padding:10px;
 }
 
-
-
-/* section */
 section{
 	-webkit-transition: -webkit-transform 1.3s;
 	transition: transform 1.3s;
+	margin-top: 80px;
+}
+
+/* section */
+section:nth-child(3){
+	height: 100%;
+	height: calc(100% - 80px);
+	overflow-x: hidden;
+	overflow-y: scroll;
 }
 
 
@@ -66,7 +72,7 @@ section#selectWrapper{
 	background-color: #e5e5e5;
 	position: relative;
 	width: 100%;
-	padding-top: 56px;
+	/*padding-top: 56px;*/
 }
 
 section#selectWrapper ul{
@@ -76,22 +82,12 @@ section#selectWrapper ul{
 }
 section#selectWrapper #bottomContainer{
 	position: relative;
-	background-color: yellow;
 	margin: 0 auto;
 	max-width: 600px;
 	padding: 3em 1em;
 	text-align: center;
 }
-section#selectWrapper #bottomContainer div{
-	display: block;
-	opacity: 0;
-}
-section#selectWrapper #bottomContainer div.on{
-	opacity: 1;
-}
-section#selectWrapper #bottomContainer div.close{
-	display: none;
-}
+
 section#resultWrapper{
 	background-color: #f2f2f2;
 	position: fixed;
@@ -100,9 +96,7 @@ section#resultWrapper{
 	right: 0px;
 	width: 100%;
 	max-width: 600px;
-	height: 100%;
-	overflow: hidden;
-	padding-top: 80px;
+	margin-top: 80px;
 }
 section#resultWrapper div{
 	margin: 20px;
@@ -137,6 +131,39 @@ body div.showResultWrapper header div.nav a:nth-child(1){
 
 body div.showSelectWrapper header div.nav a:nth-child(2){
 	display: inline;
+}
+section#selectWrapper #overWrapper{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	z-index: -10;
+	opacity: 0;
+
+	transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	-o-transition: all 0.3s;
+}
+
+section#selectWrapper #bottomContainer div{
+	display: block;
+	opacity: 0;
+	transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	-o-transition: all 0.3s;
+}
+
+section#selectWrapper #bottomContainer div.on{
+	opacity: 1;
+}
+section#selectWrapper #bottomContainer div.close{
+	display: none;
+}
+body div.showResultWrapper section#selectWrapper #overWrapper{
+	opacity: 1;
+	z-index: 10;
 }
 
 /* movie-box list responsive design */

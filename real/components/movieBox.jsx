@@ -9,13 +9,12 @@ module.exports = React.createClass({
     var ancestor = target.parentElement.parentElement.parentElement.parentElement
     var rate = (this.props.movie.rate && this.props.movie.rate === target.dataset.key)? null: target.dataset.key;
     
+    // 추가및 변경 "add" /삭제 "remove"
     var method = (rate)? "add":"remove";
     for(var i=0; i<5; i++){
-      if(i<target.dataset.key){
-          classie[method+"Class"](children[i], "on");
-      }else{
-        classie["removeClass"](children[i], "on");
-      }
+      // 선택한 값 만큼 하트 [methd] + 않선택한 부분은 [remove]
+      var localMethod = (i<target.dataset.key) ? method : "remove"
+      classie[localMethod+"Class"](children[i], "on");
     }
     classie[method+"Class"](ancestor,"on");
 
