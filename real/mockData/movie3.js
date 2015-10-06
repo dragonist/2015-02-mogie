@@ -71,7 +71,6 @@ var data =[
 	{"id":"76675","title":"심플 라이프","src":"img/img76675.jpg"},
 	{"id":"78207","title":"매드맥스: 분노의 도로","src":"img/img78207.jpg"},
 	{"id":"77219","title":"코알라","src":"img/img77219.jpg"},
-	{"id":"76660","title":"MB의 추억","src":"img/img76660.jpg"},
 	{"id":"76763","title":"몬스터 주식회사 3D","src":"img/img76763.jpg"},
 	{"id":"76626","title":"내가 살인범이다","src":"img/img76626.jpg"},
 	{"id":"76584","title":"늑대소년","src":"img/img76584.jpg"},

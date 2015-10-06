@@ -53,16 +53,18 @@ var ResultWrapper = React.createClass({
     var container;
     var ratingData = [0,0,0,0,0,0];
     var boxList = [];
+    var movieContainer;
+
     for(var i = 0; i< sessionStorage.length; i++){
       var movie = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
-      ratingData[movie.rating]++;
+      ratingData[movie.rate]++;
       var result = (<li key={movie.id}>
-        <span className="title">
+        <p className="title">
           {movie.title}
-        </span>
-        <span className="rate">
-          {movie.rating}
-        </span>
+        </p>
+        <p className="rate">
+          {movie.rate}
+        </p>
       </li>)
       boxList.push(result);
     }
@@ -76,18 +78,30 @@ var ResultWrapper = React.createClass({
         </div>
     }else{
       container = <div id="resultContainer">
-            <ul id="movieList">
-              {boxList}
-            </ul>
+            
             <div id="movieChart">
               뭔가 데스크탑에서만 보일 화면
             </div>
+
         </div> 
     }
+    if(count === 0){
+      movieList = <div id="movieList">
+        <p>평가한 영화가 없어요</p>
+      </div>
+    }else{
+      movieList = <div id="movieList">
+        <ul id="movieList">
+          {boxList}
+        </ul>
+      </div>
+    }
+    
 
     return (
       <section id="resultWrapper">
         {container}
+        {movieList}
       </section>
     )
   }
@@ -153,19 +167,19 @@ var Body = React.createClass({
     }.bind(this));
   },
   setMock: function (mockstate) {
-    sessionStorage.clear();
     app.util.localAjax({loadItem:this.state.loadMovie.length, loadEach: mockstate.selectCount}, function (res) {
       mockstate.loadMovie = this.state.loadMovie.concat(res.movies)
       this.setState(mockstate);
 
       for(var i=0; i<res.movies.length; i++){
         var movie = res.movies[i];
-        movie.rating = Math.floor((Math.random() * 5) + 1);
+        movie.rate = Math.floor((Math.random() * 5) + 1);
         sessionStorage.setItem(movie.id, JSON.stringify(movie));
       }
     }.bind(this));
   },
   componentDidMount: function () {
+    sessionStorage.clear();
     var setState = this.setState;
     var setMock = this.setMock;
 

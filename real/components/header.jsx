@@ -8,7 +8,7 @@ module.exports = React.createClass({
     }
     return (
       <header>
-        <h1><a href="#/">Mogie</a></h1>
+        <h1><a href="/">Mogie</a></h1>
         <div className="nav">
           <a href="#/">더 평가하기</a>
           {nav}

@@ -99,15 +99,17 @@
 	    var container;
 	    var ratingData = [0,0,0,0,0,0];
 	    var boxList = [];
+	    var movieContainer;
+
 	    for(var i = 0; i< sessionStorage.length; i++){
 	      var movie = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
-	      ratingData[movie.rating]++;
+	      ratingData[movie.rate]++;
 	      var result = (React.createElement("li", {key: movie.id}, 
-	        React.createElement("span", {className: "title"}, 
+	        React.createElement("p", {className: "title"}, 
 	          movie.title
 	        ), 
-	        React.createElement("span", {className: "rate"}, 
-	          movie.rating
+	        React.createElement("p", {className: "rate"}, 
+	          movie.rate
 	        )
 	      ))
 	      boxList.push(result);
@@ -122,18 +124,30 @@
 	        )
 	    }else{
 	      container = React.createElement("div", {id: "resultContainer"}, 
-	            React.createElement("ul", {id: "movieList"}, 
-	              boxList
-	            ), 
+	            
 	            React.createElement("div", {id: "movieChart"}, 
 	              "뭔가 데스크탑에서만 보일 화면"
 	            )
+
 	        ) 
 	    }
+	    if(count === 0){
+	      movieList = React.createElement("div", {id: "movieList"}, 
+	        React.createElement("p", null, "평가한 영화가 없어요")
+	      )
+	    }else{
+	      movieList = React.createElement("div", {id: "movieList"}, 
+	        React.createElement("ul", {id: "movieList"}, 
+	          boxList
+	        )
+	      )
+	    }
+	    
 
 	    return (
 	      React.createElement("section", {id: "resultWrapper"}, 
-	        container
+	        container, 
+	        movieList
 	      )
 	    )
 	  }
@@ -199,19 +213,19 @@
 	    }.bind(this));
 	  },
 	  setMock: function (mockstate) {
-	    sessionStorage.clear();
 	    app.util.localAjax({loadItem:this.state.loadMovie.length, loadEach: mockstate.selectCount}, function (res) {
 	      mockstate.loadMovie = this.state.loadMovie.concat(res.movies)
 	      this.setState(mockstate);
 
 	      for(var i=0; i<res.movies.length; i++){
 	        var movie = res.movies[i];
-	        movie.rating = Math.floor((Math.random() * 5) + 1);
+	        movie.rate = Math.floor((Math.random() * 5) + 1);
 	        sessionStorage.setItem(movie.id, JSON.stringify(movie));
 	      }
 	    }.bind(this));
 	  },
 	  componentDidMount: function () {
+	    sessionStorage.clear();
 	    var setState = this.setState;
 	    var setMock = this.setMock;
 
@@ -343,7 +357,6 @@
 		{"id":"76675","title":"심플 라이프","src":"img/img76675.jpg"},
 		{"id":"78207","title":"매드맥스: 분노의 도로","src":"img/img78207.jpg"},
 		{"id":"77219","title":"코알라","src":"img/img77219.jpg"},
-		{"id":"76660","title":"MB의 추억","src":"img/img76660.jpg"},
 		{"id":"76763","title":"몬스터 주식회사 3D","src":"img/img76763.jpg"},
 		{"id":"76626","title":"내가 살인범이다","src":"img/img76626.jpg"},
 		{"id":"76584","title":"늑대소년","src":"img/img76584.jpg"},
@@ -448,7 +461,7 @@
 	    }
 	    return (
 	      React.createElement("header", null, 
-	        React.createElement("h1", null, React.createElement("a", {href: "#/"}, "Mogie")), 
+	        React.createElement("h1", null, React.createElement("a", {href: "/"}, "Mogie")), 
 	        React.createElement("div", {className: "nav"}, 
 	          React.createElement("a", {href: "#/"}, "더 평가하기"), 
 	          nav
