@@ -1,3 +1,5 @@
+var LineChart = require("react-chartjs").Line;
+
 var app= {};
 app.SelectWrapper = "showSelectWrapper";
 app.ResultWrapper = "showResultWrapper";
@@ -43,6 +45,11 @@ var SelectWrapper = React.createClass({
 })
 
 var ResultWrapper = React.createClass({
+  getInitialState: function () {
+    return {
+      ratingData : [0,0,0,0,0]
+    };
+  },
   drawChart: function (ratingData) {
     console.log(ratingData);
   },
@@ -51,13 +58,35 @@ var ResultWrapper = React.createClass({
     var totalCount = this.props.totalCount
     var moreCount = totalCount-count;
     var container;
-    var ratingData = [0,0,0,0,0,0];
+    var ratingData = [0,0,0,0,0];
     var boxList = [];
-    var movieContainer;
+    var movieChart;
+    var chartData = {
+      labels: ["1", "2", "3", "4", "5"],
+      datasets: [
+          {
+              label: "평점분포 그래프",
+              fillColor: "rgba(252,183,180,0.2)",
+              strokeColor: "rgba(252,183,180,0.6)",
+              
+              pointColor: "rgba(252,183,180,1)",
+              pointStrokeColor: "rgba(252,183,180,1)",
 
+              pointHighlightFill: "rgba(250,144,140,1)",
+              pointHighlightStroke: "rgba(250,144,140,1)",
+              data: this.state.ratingData
+          }
+      ]
+    };
+    var chartOptions = {
+        responsive: true
+    };
+    for(var i=0; i<5; i++){
+      this.state.ratingData[i] = 0;
+    }
     for(var i = 0; i< sessionStorage.length; i++){
       var movie = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
-      ratingData[movie.rate]++;
+      this.state.ratingData[movie.rate-1]++;
       var result = (<li key={movie.id}>
         <p className="title">
           {movie.title}
@@ -68,7 +97,8 @@ var ResultWrapper = React.createClass({
       </li>)
       boxList.push(result);
     }
-    this.drawChart(ratingData);
+
+    movieChart = <LineChart data={chartData} options={chartOptions}/>
 
     if(count<totalCount){
       container = <div id="moreContinaer">
@@ -78,11 +108,9 @@ var ResultWrapper = React.createClass({
         </div>
     }else{
       container = <div id="resultContainer">
-            
-            <div id="movieChart">
-              뭔가 데스크탑에서만 보일 화면
-            </div>
-
+          <div id="movieChart">
+            {movieChart}
+          </div>
         </div> 
     }
     if(count === 0){
