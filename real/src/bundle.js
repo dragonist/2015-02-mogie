@@ -96,17 +96,12 @@
 	      ratingData : [0,0,0,0,0]
 	    };
 	  },
-	  drawChart: function (ratingData) {
-	    console.log(ratingData);
-	  },
 	  render:function () {
 	    var count = this.props.count
 	    var totalCount = this.props.totalCount
-	    var moreCount = totalCount-count;
-	    var container;
-	    var ratingData = [0,0,0,0,0];
 	    var boxList = [];
 	    var movieChart;
+	    var container;
 	    var chartData = {
 	      labels: ["1", "2", "3", "4", "5"],
 	      datasets: [
@@ -145,37 +140,14 @@
 	    }
 
 	    movieChart = React.createElement(LineChart, {data: chartData, options: chartOptions})
-
-	    if(count<totalCount){
-	      container = React.createElement("div", {id: "moreContinaer"}, 
-	          React.createElement("p", null, 
-	            totalCount-count, "개 더 체크해 주세요"
-	          )
-	        )
-	    }else{
-	      container = React.createElement("div", {id: "resultContainer"}, 
-	          React.createElement("div", {id: "movieChart"}, 
-	            movieChart
-	          )
-	        ) 
-	    }
-	    if(count === 0){
-	      movieList = React.createElement("div", {id: "movieList"}, 
-	        React.createElement("p", null, "평가한 영화가 없어요")
-	      )
-	    }else{
-	      movieList = React.createElement("div", {id: "movieList"}, 
-	        React.createElement("ul", {id: "movieList"}, 
-	          boxList
-	        )
-	      )
-	    }
+	    container = (count<totalCount) ?
+	    React.createElement("p", null, totalCount-count, "개 더 체크해 주세요") : React.createElement("div", {id: "movieChart"}, movieChart) 
+	    movieList = (count === 0)? React.createElement("p", null, "평가한 영화가 없어요") : React.createElement("ul", {id: "movieList"}, boxList)
 	    
-
 	    return (
 	      React.createElement("section", {id: "resultWrapper"}, 
-	        container, 
-	        movieList
+	        React.createElement("div", {id: "resultContainer"}, container), 
+	        React.createElement("div", {id: "movieList"}, movieList)
 	      )
 	    )
 	  }

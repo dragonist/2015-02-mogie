@@ -50,17 +50,12 @@ var ResultWrapper = React.createClass({
       ratingData : [0,0,0,0,0]
     };
   },
-  drawChart: function (ratingData) {
-    console.log(ratingData);
-  },
   render:function () {
     var count = this.props.count
     var totalCount = this.props.totalCount
-    var moreCount = totalCount-count;
-    var container;
-    var ratingData = [0,0,0,0,0];
     var boxList = [];
     var movieChart;
+    var container;
     var chartData = {
       labels: ["1", "2", "3", "4", "5"],
       datasets: [
@@ -99,37 +94,14 @@ var ResultWrapper = React.createClass({
     }
 
     movieChart = <LineChart data={chartData} options={chartOptions}/>
-
-    if(count<totalCount){
-      container = <div id="moreContinaer">
-          <p>
-            {totalCount-count}개 더 체크해 주세요
-          </p>
-        </div>
-    }else{
-      container = <div id="resultContainer">
-          <div id="movieChart">
-            {movieChart}
-          </div>
-        </div> 
-    }
-    if(count === 0){
-      movieList = <div id="movieList">
-        <p>평가한 영화가 없어요</p>
-      </div>
-    }else{
-      movieList = <div id="movieList">
-        <ul id="movieList">
-          {boxList}
-        </ul>
-      </div>
-    }
+    container = (count<totalCount) ?
+    <p>{totalCount-count}개 더 체크해 주세요</p> : <div id="movieChart">{movieChart}</div> 
+    movieList = (count === 0)? <p>평가한 영화가 없어요</p> : <ul id="movieList">{boxList}</ul>
     
-
     return (
       <section id="resultWrapper">
-        {container}
-        {movieList}
+        <div id="resultContainer">{container}</div>
+        <div id="movieList">{movieList}</div>
       </section>
     )
   }
