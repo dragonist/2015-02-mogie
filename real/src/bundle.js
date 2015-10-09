@@ -119,9 +119,8 @@
 	          }
 	      ]
 	    };
-	    console.log(movies[0]);
+	    // console.log(movies[0]);
 	   
-
 	    var chartOptions = {
 	        responsive: true
 	    };
@@ -193,12 +192,9 @@
 	    }, 500);
 	  },
 	  addMovie: function (movie) {
-	    debugger;
-	    // sessionStorage.setItem(movie.id, JSON.stringify(movie));
 	    this.setState({selectCount: this.state.selectCount+1})
 	  },
 	  removeMovie: function (movie) {
-	    // sessionStorage.removeItem(movie.id);
 	    this.setState({selectCount: this.state.selectCount-1})
 	  },
 	  onScroll:function() {
@@ -220,7 +216,6 @@
 	    }.bind(this));
 	  },
 	  componentDidMount: function () {
-	    sessionStorage.clear();
 	    var setState = this.setState;
 	    var setMock = this.setMock;
 
@@ -4091,7 +4086,6 @@
 	    var method = (rate)? "add":"remove";
 	    classie[method+"Class"](ancestor,"on");
 	    this.props.movie.rate = rate;
-	    debugger;
 	   	this.props[method+"Movie"](this.props.movie);
 	  },
 	  render: function() {

@@ -10,7 +10,6 @@ module.exports = React.createClass({
     var method = (rate)? "add":"remove";
     classie[method+"Class"](ancestor,"on");
     this.props.movie.rate = rate;
-    debugger;
    	this.props[method+"Movie"](this.props.movie);
   },
   render: function() {
