@@ -1,11 +1,18 @@
 var MovieBox = require('./movieBox.jsx');
 module.exports  = React.createClass({
   render: function() {
-    var boxList = this.props.data.map(function (movie, i) {
+    var boxList = this.props.movies;
+    if(this.props.filter){
+      boxList = boxList.filter(function (movie) {
+        return (movie.rate)?true:false;
+      })
+    }
+    boxList = boxList.map(function (movie, i) {
       return (
           <MovieBox 
             key={i} 
-            movie={movie} 
+            movie={movie}
+            filter={this.props.filter}
             addRating={this.props.addMovie} 
             removeRating={this.props.removeMovie}>
           </MovieBox>

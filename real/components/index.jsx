@@ -25,7 +25,7 @@ var SelectWrapper = React.createClass({
       <section id="selectWrapper">
           <a id="overWrapper" href="#/"></a>
           <BoxContainer
-            data={this.props.movies}
+            movies={this.props.movies}
             addMovie={this.props.addMovie} 
             removeMovie={this.props.removeMovie} />
           <div id="bottomContainer">
@@ -53,7 +53,7 @@ var ResultWrapper = React.createClass({
   render:function () {
     var count = this.props.count
     var totalCount = this.props.totalCount
-    var boxList = [];
+    var movies = this.props.movies;
     var movieChart;
     var container;
     var chartData = {
@@ -73,31 +73,28 @@ var ResultWrapper = React.createClass({
           }
       ]
     };
+    console.log(movies[0]);
+   
+
     var chartOptions = {
         responsive: true
     };
     for(var i=0; i<5; i++){
       this.state.ratingData[i] = 0;
     }
-    for(var i = 0; i< sessionStorage.length; i++){
-      var movie = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
-      this.state.ratingData[movie.rate-1]++;
-      var result = (<li key={movie.id}>
-        <p className="title">
-          {movie.title}
-        </p>
-        <p className="rate">
-          {movie.rate}
-        </p>
-      </li>)
-      boxList.push(result);
-    }
+    var ratinglocal = [0,0,0,0,0];
+    var boxList = this.props.movies;
+    boxList = boxList.filter(function (movie) { return (movie.rate)?true:false;})
+    boxList = boxList.forEach(function (movie) { this.state.ratingData[movie.rate-1] ++;}, this); 
 
-    movieChart = <LineChart data={chartData} options={chartOptions}/>
+    movieChart = <LineChart data={chartData} options={chartOptions} redraw />
     container = (count<totalCount) ?
     <p>{totalCount-count}개 더 체크해 주세요</p> : <div id="movieChart">{movieChart}</div> 
-    movieList = (count === 0)? <p>평가한 영화가 없어요</p> : <ul id="movieList">{boxList}</ul>
-    
+    movieList = (count === 0)? <p>평가한 영화가 없어요</p> : <BoxContainer
+            movies={this.props.movies}
+            addMovie={this.props.addMovie} 
+            removeMovie={this.props.removeMovie} 
+            filter="true" />
     return (
       <section id="resultWrapper">
         <div id="resultContainer">{container}</div>
@@ -150,11 +147,11 @@ var Body = React.createClass({
     }, 500);
   },
   addMovie: function (movie) {
-    sessionStorage.setItem(movie.id, JSON.stringify(movie));
+    // sessionStorage.setItem(movie.id, JSON.stringify(movie));
     this.setState({selectCount: this.state.selectCount+1})
   },
   removeMovie: function (movie) {
-    sessionStorage.removeItem(movie.id);
+    // sessionStorage.removeItem(movie.id);
     this.setState({selectCount: this.state.selectCount-1})
   },
   onScroll:function() {
@@ -169,13 +166,10 @@ var Body = React.createClass({
   setMock: function (mockstate) {
     app.util.localAjax({loadItem:this.state.loadMovie.length, loadEach: mockstate.selectCount}, function (res) {
       mockstate.loadMovie = this.state.loadMovie.concat(res.movies)
-      this.setState(mockstate);
-
-      for(var i=0; i<res.movies.length; i++){
-        var movie = res.movies[i];
+      mockstate.loadMovie.forEach(function (movie) {
         movie.rate = Math.floor((Math.random() * 5) + 1);
-        sessionStorage.setItem(movie.id, JSON.stringify(movie));
-      }
+      })
+      this.setState(mockstate);
     }.bind(this));
   },
   componentDidMount: function () {
@@ -186,7 +180,7 @@ var Body = React.createClass({
     var router = Router({
       '/'      : setState.bind(this, {nowShowing: app.SelectWrapper}),
       '/result': setState.bind(this, {nowShowing: app.ResultWrapper}),
-      '/mock'  : setMock.bind(this, {nowShowing: app.ResultWrapper, selectCount:11})
+      '/mock'  : setMock.bind(this, {nowShowing: app.SelectWrapper, selectCount:11})
     });
 
     var width = document.body.offsetWidth;
@@ -217,7 +211,8 @@ var Body = React.createClass({
     resultWrapper = 
       <ResultWrapper 
         count={this.state.selectCount}
-        totalCount = {this.state.totalCount} />
+        totalCount = {this.state.totalCount} 
+        movies = {this.state.loadMovie}/>
     
     return (
       <div className={this.state.nowShowing}>
