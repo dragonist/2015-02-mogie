@@ -4,27 +4,6 @@ var app= {};
 app.SelectWrapper = "showSelectWrapper";
 app.ResultWrapper = "showResultWrapper";
 app.Movies = require('./../mockData/movie3.js');
-
-app.chartData = {
-  labels: ["하트1개", "하트2개", "하트3개", "하트4개", "하트5개"],
-  datasets: [
-      {
-          label: "평점분포 그래프",
-          fillColor: "rgba(252,183,180,0.2)",
-          strokeColor: "rgba(252,183,180,0.6)",
-          
-          pointColor: "rgba(252,183,180,1)",
-          pointStrokeColor: "rgba(252,183,180,1)",
-
-          pointHighlightFill: "rgba(250,144,140,1)",
-          pointHighlightStroke: "rgba(250,144,140,1)"
-      }
-  ]
-};
-app.chartOptions = {
-    responsive: true
-};
-
 app.util = {
   localAjax: function (req, callback) {
     setTimeout(function () {
@@ -38,7 +17,6 @@ app.util = {
 
 var BoxContainer = require('./boxContainer.jsx');
 var Header = require('./header.jsx');
-
 
 
 var SelectWrapper = React.createClass({
@@ -78,10 +56,26 @@ var ResultWrapper = React.createClass({
     var boxList = [];
     var movieChart;
     var container;
-    var chartData = app.chartData;
-    var chartOptions = app.chartOptions;
-    chartData.data = this.state.ratingData;
+    var chartData = {
+      labels: ["1", "2", "3", "4", "5"],
+      datasets: [
+          {
+              label: "평점분포 그래프",
+              fillColor: "rgba(252,183,180,0.2)",
+              strokeColor: "rgba(252,183,180,0.6)",
+              
+              pointColor: "rgba(252,183,180,1)",
+              pointStrokeColor: "rgba(252,183,180,1)",
 
+              pointHighlightFill: "rgba(250,144,140,1)",
+              pointHighlightStroke: "rgba(250,144,140,1)",
+              data: this.state.ratingData
+          }
+      ]
+    };
+    var chartOptions = {
+        responsive: true
+    };
     for(var i=0; i<5; i++){
       this.state.ratingData[i] = 0;
     }
@@ -89,8 +83,12 @@ var ResultWrapper = React.createClass({
       var movie = JSON.parse(sessionStorage.getItem(sessionStorage.key(i)));
       this.state.ratingData[movie.rate-1]++;
       var result = (<li key={movie.id}>
-        <p className="title">{movie.title}</p>
-        <p className="rate">{movie.rate}</p>
+        <p className="title">
+          {movie.title}
+        </p>
+        <p className="rate">
+          {movie.rate}
+        </p>
       </li>)
       boxList.push(result);
     }
@@ -99,12 +97,10 @@ var ResultWrapper = React.createClass({
     container = (count<totalCount) ?
     <p>{totalCount-count}개 더 체크해 주세요</p> : <div id="movieChart">{movieChart}</div> 
     movieList = (count === 0)? <p>평가한 영화가 없어요</p> : <ul id="movieList">{boxList}</ul>
+    
     return (
       <section id="resultWrapper">
-        <div id="resultContainer">
-          <p> 영화 평점 분포 그래프</p> 
-          {container}
-        </div>
+        <div id="resultContainer">{container}</div>
         <div id="movieList">{movieList}</div>
       </section>
     )
