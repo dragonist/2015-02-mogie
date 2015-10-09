@@ -147,6 +147,7 @@ var Body = React.createClass({
     }, 500);
   },
   addMovie: function (movie) {
+    debugger;
     // sessionStorage.setItem(movie.id, JSON.stringify(movie));
     this.setState({selectCount: this.state.selectCount+1})
   },

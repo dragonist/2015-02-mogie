@@ -193,6 +193,7 @@
 	    }, 500);
 	  },
 	  addMovie: function (movie) {
+	    debugger;
 	    // sessionStorage.setItem(movie.id, JSON.stringify(movie));
 	    this.setState({selectCount: this.state.selectCount+1})
 	  },
@@ -4061,8 +4062,8 @@
 	            key: i, 
 	            movie: movie, 
 	            filter: this.props.filter, 
-	            addRating: this.props.addMovie, 
-	            removeRating: this.props.removeMovie}
+	            addMovie: this.props.addMovie, 
+	            removeMovie: this.props.removeMovie}
 	          )
 	      );
 	    }, this);
@@ -4079,39 +4080,24 @@
 /***/ function(module, exports) {
 
 	/** @jsx React.DOM */module.exports = React.createClass({displayName: "module.exports",
-	  getInitialState: function() {
-	    return {"id":"77959","title":"빌리 엘리어트 뮤지컬 라이브","src":"img/img77959.jpg"};
-	  },
 	  onClick:function (e) {
 	    if(this.props.filter) return;
 	    var target = e.target;
-	    var children = target.parentNode.children;
 	    // var ancestor = target.closest(".movie-box"); //for ei 8
 	    var ancestor = target.parentElement.parentElement.parentElement.parentElement
 	    var rate = (this.props.movie.rate && this.props.movie.rate === target.dataset.key)? null: target.dataset.key;
 	    
 	    // 추가및 변경 "add" /삭제 "remove"
 	    var method = (rate)? "add":"remove";
-	    for(var i=0; i<5; i++){
-	      // 선택한 값 만큼 하트 [methd] + 않선택한 부분은 [remove]
-	      var localMethod = (i<target.dataset.key) ? method : "remove"
-	      classie[localMethod+"Class"](children[i], "on");
-	    }
 	    classie[method+"Class"](ancestor,"on");
-
 	    this.props.movie.rate = rate;
-	   	this.props[method+"Rating"](this.props.movie);
+	    debugger;
+	   	this.props[method+"Movie"](this.props.movie);
 	  },
-	  
 	  render: function() {
 	    var boxImage, boxContents;
 	    var rate = ["", "", "", "", ""];
-	    boxImage = React.createElement("div", {className: "box-image"}, 
-	            React.createElement("img", {src: this.props.movie.src, alt: this.props.movie.title, width: "185px"})
-	          )
-	    if(this.props.filter){
-	      boxImage = null;
-	    }
+
 	    var movieBoxClassName = "movie-box"
 	    var count = this.props.movie.rate
 	    if(count){
@@ -4120,6 +4106,8 @@
 	        rate[i] = (i < count) ? "on" : "";
 	      }
 	    }
+	    boxImage = (this.props.filter)? null: 
+	    React.createElement("div", {className: "box-image"}, React.createElement("img", {src: this.props.movie.src, alt: this.props.movie.title}))
 	    
 	    boxContents = React.createElement("div", {className: "box-contents"}, 
 	            React.createElement("div", {className: "contents"}, 

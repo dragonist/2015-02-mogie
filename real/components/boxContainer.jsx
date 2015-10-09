@@ -13,8 +13,8 @@ module.exports  = React.createClass({
             key={i} 
             movie={movie}
             filter={this.props.filter}
-            addRating={this.props.addMovie} 
-            removeRating={this.props.removeMovie}>
+            addMovie={this.props.addMovie} 
+            removeMovie={this.props.removeMovie}>
           </MovieBox>
       );
     }, this);
